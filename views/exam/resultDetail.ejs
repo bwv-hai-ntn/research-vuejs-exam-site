@@ -1,0 +1,160 @@
+<link rel="stylesheet" href="/css/resultDetail.css">
+
+<input type="hidden" value="<%= JSON.stringify(exam)%>" disabled name="examData">
+<input type="hidden" value="<%= JSON.stringify(answer)%>" disabled name="answerData">
+<div class="row pdb-20" style="margin: auto">
+    <form class="col-12">
+      <div class="submit-date col-12 col-sm-12">
+        Submitted <%= answer ? dateFormatCountry(answer.completedAt, {
+          format:'YYYY/MM/DD HH:mm:ss', 
+          country: answer.country,
+          isShowTZ: true,
+        }) : '' %>
+      </div>
+      <div class="col-12 col-sm-12 col-md-8 col-lg-7 col-xl-7 from-content">
+        <div class="from-header"></div>
+        <div class="header-result pdb-10">
+          <div class="col col-12 row">
+            <div class="col-4 top-5">
+              <label class="purple-text mgb-0">
+                Name:
+              </label>
+              <span class="word-break-text">
+                  <%= answer ? answer.name : '' %>  
+              </span>
+            </div>
+            <div class="col-4 top-5">
+              <% if (exam && exam.signinRestrict === 1) { %>
+                <label class="purple-text mgb-0">
+                  Email:
+                </label>
+                <span class="word-break-text">
+                    <%= answer ? answer.email : '' %> 
+                </span>
+              <% } %>
+            </div>
+            <div class="col-4 top-5">
+              <label class="purple-text mgb-0">
+                Total score:
+              </label>
+              <span class="word-break-text">
+                  <%= answer ? answer.totalScore : '' %> / <%= exam ? exam.totalPoints : '' %> (<%= answer ? answer.scorePercentage : '' %>%)
+              </span>
+            </div>
+          </div>
+        </div>
+        <div id="exam-title" class="word-break-text" style="margin: 50px 0 0 15px;">
+            <h3>
+                <%- exam ? nl2br(exam.title) : '' %>
+            </h3>
+            <% if (showResultFlag === static.showResult.showCorrectAnswer) { %>
+                <div>
+                    <%- exam ? nl2br(exam.description) : '' %>
+                </div>
+            <% } %>
+        </div>
+      </div>
+    </form>
+    <% if (examSections && examSections.length > 0) { %>
+        <% for (examSection of examSections) { %>
+          <% const idx = examSections.indexOf(examSection); let examQuestionPoints = 0; let answersPoints = 0; %>
+          <form class="sectionForm col-12 <%= idx > 4 ? 'hide' : ''  %>" exam-section-id="<%= examSection.id %>">
+            <% if (showResultFlag === static.showResult.showCorrectAnswer) { %>
+              <div class="col-12 col-sm-12 col-md-8 col-lg-7 col-xl-7 from-content">
+                <div class="from-header">
+                    <label class="col-12 word-break-text row padding-header white-text">
+                      <div class="col-9">
+                        <%- examSection ? nl2br(examSection.title) : '' %>
+                      </div>
+                      <div class="col-3" style="text-align: right;" id="pointsSection">
+                        <%= numberFormat(answersPoints) %> of <%= numberFormat(examQuestionPoints) %> points
+                      </div>
+                    </label>
+                </div>
+                <div class="col-12 pl-3" style="margin-top: 15px;">
+                    <%- examSection ? nl2br(examSection.description) : '' %>
+                </div>
+              </div>
+              <!-- content question  -->
+              <% const examQuestions = examSection.examQuestions || [] %>
+              <% for (examQuestion of examQuestions) { %>
+                <% examQuestionPoints += Number(examQuestion.points) %> 
+                <% if (examQuestion.answerDetail) { %>
+                  <%  if (examQuestion.answerDetail.score || examQuestion.answerDetail.score !== 0) { %>
+                      <% answersPoints += Number(examQuestion.answerDetail.score) %> 
+                  <% } %>
+                <% } %> 
+                <%- include('./resultDetailChild.ejs', {dataExamQuestion: examQuestion, showFlag: showResultFlag}) %>
+                <% if (examQuestion.questionChild !== undefined) { %>
+                  <% for (questionChild of examQuestion.questionChild) {%>
+                    <% examQuestionPoints += Number(questionChild.points) %> 
+                    <% if (questionChild.answerDetail) { %>
+                      <%  if (questionChild.answerDetail.score || questionChild.answerDetail.score !== 0) { %>
+                        <% answersPoints += Number(questionChild.answerDetail.score) %> 
+                      <% } %>
+                    <% } %> 
+                    <%- include('./resultDetailChild.ejs', {dataExamQuestion: questionChild, showFlag: showResultFlag}) %>
+                  <% } %>    
+                <% } %>  
+              <% } %>
+            <% } else if (showResultFlag === static.showResult.showSubmittedWork) { %>
+              <div class="col-12 col-sm-12 col-md-8 col-lg-7 col-xl-7 from-content">
+                <div class="from-header">
+                    <label class="col-12 word-break-text row padding-header white-text">
+                      <div class="col-7">
+                        <%- examSection ? nl2br(examSection.title) : '' %>
+                      </div>
+                      <div class="col-5" style="text-align: right;" id="pointsSection">
+                        <%= numberFormat(answersPoints) %> of <%= numberFormat(examQuestionPoints) %> points
+                      </div>
+                    </label>
+                </div>
+                <!-- content question  -->
+                <% const examQuestions = examSection.examQuestions || [] %>
+                <% for (examQuestion of examQuestions) { %>
+                  <% examQuestionPoints += Number(examQuestion.points) %> 
+                  <% if (examQuestion.answerDetail) { %>
+                    <%  if (examQuestion.answerDetail.score || examQuestion.answerDetail.score !== 0) { %>
+                        <% answersPoints += Number(examQuestion.answerDetail.score) %> 
+                    <% } %>
+                  <% } %> 
+                  <%- include('./resultDetailChild.ejs', {dataExamQuestion: examQuestion, showFlag: showResultFlag}) %>
+                  <% if (examQuestion.questionChild !== undefined) { %>
+                    <% for (questionChild of examQuestion.questionChild) {%>
+                      <% examQuestionPoints += Number(questionChild.points) %> 
+                      <% if (questionChild.answerDetail) { %>
+                        <%  if (questionChild.answerDetail.score || questionChild.answerDetail.score !== 0) { %>
+                          <% answersPoints += Number(questionChild.answerDetail.score) %> 
+                        <% } %>
+                      <% } %> 
+                      <%- include('./resultDetailChild.ejs', {dataExamQuestion: questionChild, showFlag: showResultFlag}) %>
+                    <% } %>    
+                  <% } %>  
+                <% } %>
+              </div>
+            <% } %>
+            <input type="hidden" value="<%= JSON.stringify(numberFormat(examQuestionPoints))%>" disabled name="examQuestionPoints">
+            <input type="hidden" value="<%= JSON.stringify(numberFormat(answersPoints))%>" disabled name="answersPoints">
+          </form>
+        <% } %>
+        <% if (examSections.length > 5) { %>
+          <div class="loadmore">
+            <a class="resultDetail" id="loadmore-result-detail" @click="loadmoreResultDetail()">View more</a>
+          </div>
+        <% } %>
+    <% } %>
+</div>
+
+<!-- <link rel="stylesheet" href="/css/common.css"> -->
+<script src="/js/components/checkbox.js"></script>
+<script src="/js/components/input-nolabel.js"></script>
+<script src="/js/components/custom.js"></script>
+<script src="/js/resultDetail/vue.components.js"></script>
+<script src="/js/lib/moment.min.js"></script>
+<script src="/js/lib/lodash.debounce.min.js"></script>
+
+<%- contentFor('pageTitle') %>
+<%= exam.title + " - ResultDetail - Exam Site" %>
+
+<%- contentFor('pageDescription') %>
+<%= exam.description %>

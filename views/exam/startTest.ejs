@@ -1,0 +1,81 @@
+<input type="hidden" value="<%= JSON.stringify(exam) %>" disabled name="examData">
+
+<form method="post" ref="form" @submit="checkForm">
+  <div class="row">
+    <div class="col-12 col-sm-12 col-md-8 col-lg-7 col-xl-5 from-content">
+        <div class="from-header"></div>
+        <div class="col-12">
+          <h2 class="from-title word-break-text">
+            <pre><%= exam.title %></pre>
+          </h2>
+        </div>
+        <div class="col-12">
+          <p class="word-break-text">
+            <pre><%= exam.description %></pre>
+          </p>
+        </div>
+        <% if (exam.signinRestrict !== 1) {%>
+          <exam-input
+            :name="'name'"
+            :labelname="'Your name:'"
+            :required=true
+            :inputclass=" (errors.length > 0 ? 'error' : '') + ' no-outline'"
+            :placeholder="'Please enter your name'"
+            ref="name"
+          >
+          </exam-input>
+          <div class="col-12 error" v-for="error in errors">{{ error }}</div>
+        <% } else { %>
+          <div class="col-12">
+            <br>
+            <p>Your email address (<b><%= user.email%></b>) will be recorded when you submit this form. Not you?
+            <button type= "button" class="btn btn-link" style="padding: 0" v-on:click="switchAccount"><ins>Switch account</ins></button></p>
+          </div>
+        <% } %>
+      <%
+        let isShow = false;
+        if (exam.showResult == static.showResult.show ||
+            exam.showResult == static.showResult.showSubmittedWork || 
+            exam.showResult == static.showResult.showCorrectAnswer) {
+          isShow = true;
+        }
+      %>
+      <% if (isShow) {%>
+      <exam-switch
+      name="email"
+      labelname="Email to receive result"
+      :required="<%= JSON.stringify(true) %>"
+      v-model="$v.data.email.$model"
+      :restrict="<%= JSON.stringify(exam.signinRestrict) %>"
+      >
+      </exam-switch>
+      <% } %>
+    </div>
+  </div>
+  <div class="row">
+    <br /><br /><br />
+    <exam-button
+      :type="'submit'"
+      :class="'btn btn-info'"
+      :id="'btn-start'"
+      :text="'Start'"
+    ></exam-button>
+  </div>
+</form>
+
+<form method="post" ref="switchAccount" action="/login/google"></form>
+
+<script src="/js/startTest/vue.components.js"></script>
+
+<%- contentFor('pageTitle') %>
+<%= exam.title + " - StartTest - Exam Site" %>
+
+<%- contentFor('pageDescription') %>
+<%= exam.description %>
+
+<%- contentFor('ogType') %>website
+<%- contentFor('ogSiteName') %>EXAM site
+<%- contentFor('ogTitle') %><%= exam.title %>
+<%- contentFor('ogDescription') %><%= exam.description %>
+<%- contentFor('ogUrl') %><%= locals.domain + '/startTest/' + exam.accessKey %>
+<%- contentFor('ogImage') %><%= exam.imagePath %>

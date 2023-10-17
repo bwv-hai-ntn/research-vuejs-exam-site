@@ -1,0 +1,176 @@
+<input type="hidden" value="<%= JSON.stringify(exam)%>" disabled name="examData">
+<input type="hidden" value="<%= JSON.stringify(answer)%>" disabled name="answerData">
+<input type="hidden" value="<%= examId %>" disabled name="examIdHidden">
+<input type="hidden" value="<%= answer ? answer.id : '' %>" disabled name="answerIdHidden">
+<%- include('../admin/common/tabs', {curentTab: 'answers', id: examId}) %>
+<div class="nav nav-tabs nav-justified">
+  <div class="nav-item answers-header">
+    <div class="col col-12 row">
+      <div class="col-2">
+        <exam-button
+        type="button"
+        id="backtolist_btn"
+        class="mgl-10"
+        text="Answer list"
+        iconbackarrow="true"
+        >
+        </exam-button>
+      </div>
+      <div class="row col-10">
+        <div class="col-5 top-5">
+          <label class="purple-text">
+            Examinee name:
+          </label>
+          <span class="word-break-text">
+            <%= answer ? answer.name : '' %> 
+          </span>
+        </div>
+        <div class="col-4 top-5">
+          <label class="purple-text">
+            Email:
+          </label>
+          <span class="word-break-text">
+            <%= answer ? answer.email : '' %> 
+          </span>
+        </div>
+        <div class="col-3 top-5">
+          <label class="purple-text">
+            Total score:
+          </label>
+          <span class="word-break-text">
+            <%= answer ? answer.totalScore : '' %> / <%= exam ? exam.totalPoints : '' %> (<%= answer ? answer.scorePercentage : '' %>%)
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="tab-content py-3 tabAnswerView" id="myTabContent">
+  <div class="tab-pane fade show active" id="answers">
+    <div class="row">
+      <div class="col col-12 mg-bt-20">
+        <exam-button
+          class="btn-cancel mgr-10 <%= currentPageView > 0 ? 'show' : 'hide' %>"
+          type="button"
+          id="btn-back"
+          text="Previous section"
+        >
+        </exam-button>
+        <exam-button
+          class="mgr-10"
+          type="button"
+          id="list_btn"
+          text="Section list"
+          :iconlist="true"
+        >
+        </exam-button>
+        <exam-button
+          class="btn-cancel mgr-10 <%= (examSections && examSections.length > 1 && currentPageView < examSections.length - 1) ? '' : 'hide' %>"
+          type="button"
+          id="btn-next"
+          text="Next section"
+        >
+        </exam-button>
+        <div style="float: right; font-style: italic;">
+          Submitted <%= answer ? dateFormatCountry(answer.completedAt, {
+            format:'YYYY/MM/DD HH:mm:ss', 
+            country: answer.country,
+          }) : '' %>
+        </div>
+      </div>
+      <% let examQuestionPoints = 0; let answersPoints = 0; if (examSections && examSections.length > 0) { %>
+        <% for (examSection of examSections) { %>
+          <% const idx = examSections.indexOf(examSection); %>
+          <form class="sectionForm col-12 <%= idx === (currentPageView ? Number(currentPageView) : 0) ? '' : 'hide' %>" exam-section-id="<%=examSection.id%>">
+            <div class="col-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 from-content content-admin">
+              <div class="from-header">
+                <label class="col-12 word-break-text row padding-header white-text">
+                  <div class="col-9">
+                    <%- examSection ? nl2br(examSection.title) : '' %>
+                  </div>
+                  <div class="col-3" style="text-align: right;" id="pointsSection"></div>
+                </label>
+              </div>
+              <div class="col-12" style="margin-top: 15px;">
+                <%- examSection ? nl2br(examSection.description) : '' %>
+              </div>
+            </div>
+            <!-- content question  -->
+            <% const examQuestions = examSection.examQuestions || [] %>
+            <% for (examQuestion of examQuestions) {%>
+              <% examQuestionPoints += Number(examQuestion.points) %> 
+              <% if (examQuestion.answerDetail) { %>
+                <%  if (examQuestion.answerDetail.score || examQuestion.answerDetail.score !== 0) { %>
+                    <% answersPoints += Number(examQuestion.answerDetail.score) %> 
+                <% } %>
+              <% } %> 
+              <%- include('./answerViewDetail.ejs', {dataExamQuestion: examQuestion}) %>
+              <% if (examQuestion.questionChild !== undefined) { %>
+                <% for (questionChild of examQuestion.questionChild) {%>
+                  <% examQuestionPoints += Number(questionChild.points) %> 
+                  <% if (questionChild.answerDetail) { %>
+                    <%  if (questionChild.answerDetail.score || questionChild.answerDetail.score !== 0) { %>
+                      <% answersPoints += Number(questionChild.answerDetail.score) %> 
+                    <% } %>
+                  <% } %> 
+                  <%- include('./answerViewDetail.ejs', {dataExamQuestion: questionChild}) %>
+                <% } %>    
+              <% } %>  
+            <% } %>
+            <!-- end content question -->
+            <input type="hidden" value="<%= JSON.stringify(numberFormat(examQuestionPoints))%>" disabled name="examQuestionPoints">
+            <input type="hidden" value="<%= JSON.stringify(numberFormat(answersPoints))%>" disabled name="answersPoints">
+          </form>
+        <% } %>
+      <% } %>
+    </div>
+  </div>
+</div>
+<%- include('../exam/sectionViewPopup.ejs', {examSections, answerId: answer.id}) %>
+
+<%- contentFor('deletedExamMess') %>    
+<%= typeof deletedExamMess !== 'undefined' ? deletedExamMess : '' %>
+<%- contentFor('pageTitleHeader') %>
+<%= exam.title %>
+<%- contentFor('userImage') %>
+<%= adminInfo.userImage %> 
+<%- contentFor('userName') %>
+<%= adminInfo.userName %> 
+<%- contentFor('userAuthor') %>
+<%= adminInfo.userAuthor %> 
+<%- contentFor('displayId') %>
+exams_list
+<%- contentFor('permissionSideBar') %>
+<%= adminInfo.userAuthor !== 'ADMIN' ? 'hidden-side' : '' %> 
+<%- contentFor('copyBtn') %>
+<exam-button-icon
+  type="button"
+  id="copy_btn"
+  iconcopy="true"
+  customclass="btn-header"
+>
+</exam-button-icon>
+<%- contentFor('deleteBtn') %>
+<exam-button-icon
+  v-if="<%=exam && exam.deletedAt === null%>"
+  type="button"
+  id="delete_btn"
+  icondelete="true"
+  customclass="btn-header"
+>
+</exam-button-icon>
+<%- contentFor('revertBtn') %>
+<exam-button-icon
+  v-if="<%=exam && exam.deletedAt !== null%>"
+  type="button"
+  id="revert_btn"
+  iconrevert="true"
+  customclass="btn-header"
+>
+</exam-button-icon>
+
+<script src="/js/admin/answer/answerView.js"></script>
+<script src="/js/lib/moment.min.js"></script>
+
+
+

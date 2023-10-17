@@ -1,0 +1,55 @@
+<div class="modal fade" id="examModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="examModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div style="float: left;">Section list</div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body" style="text-align: center;">
+        <% if (examSections && examSections.length > 0) { %>
+          <% for (examSection of examSections) {%>
+            <% const idx = examSections.indexOf(examSection); %>
+            <label class="col-12 word-break-text row">
+              <div class="col-8" style="text-align: left;">
+                <exam-div
+                  id="<%= idx %>"
+                  customclass="div-title"
+                  title="<%= examSection ? (examSection.title ? (examSection.title) : '(Untitled Section)') : '' %>"
+                >
+                </exam-div>
+                <div style="opacity: 0.5;">
+                  Section <%= idx + 1 %> of <%= examSections.length %> 
+                </div>
+              </div>
+              <% const examQuestions = examSection.examQuestionsPopup || [] %>
+              <% let examQuestionPoints = 0; let answersPoints = 0; for (examQuestion of examQuestions) { %>
+                <% examQuestionPoints += Number(examQuestion.points) %> 
+                <% if (examQuestion.answerDetail) { %>
+                  <%  if (examQuestion.answerDetail.score || examQuestion.answerDetail.score !== 0) { %>
+                      <% answersPoints += Number(examQuestion.answerDetail.score) %> 
+                  <% } %>
+                <% } %> 
+                <% if (examQuestion.questionChild !== undefined) { %>
+                  <% for (questionChild of examQuestion.questionChild) {%>
+                    <% examQuestionPoints += Number(questionChild.points) %> 
+                    <% if (questionChild.answerDetail) { %>
+                      <%  if (questionChild.answerDetail.score || questionChild.answerDetail.score !== 0) { %>
+                        <% answersPoints += Number(questionChild.answerDetail.score) %> 
+                      <% } %>
+                    <% } %> 
+                  <% } %>
+                <% } %>
+              <% } %>
+              <div class="col-4" style="text-align: right; opacity: 0.8;">
+                <%= numberFormat(answersPoints) %> of <%= numberFormat(examQuestionPoints) %> points 
+              </div>
+            </label>
+            <hr style="width: 100%;" v-if="<%= idx + 1 !== examSections.length %>">
+          <% } %>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>

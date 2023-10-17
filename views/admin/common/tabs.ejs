@@ -1,0 +1,27 @@
+
+<ul class="nav nav-tabs nav-justified">
+  <li class="nav-item nav-tabs-exam <%=  curentTab == 'settings' ? 'defaul-cursor' : ''%>">
+    <a
+     <%= curentTab !== 'settings' ? `href=/admin/examSettings/${id}` : '' %>
+     class="btn btn-tab nav-link no-outline p-15 <%= curentTab === 'settings' ? 'active defaul-cursor' : ''%>">
+     Settings
+    </a>
+    <div class="custom_div_inline <%= curentTab === 'settings' ? 'active' : ''%>"></div>
+  </li>
+  <li class="nav-item nav-tabs-exam <%= id ? '' : 'hide-tabs'%>">
+    <a 
+     <%= curentTab !== 'questions' ? `href=/admin/examQuestions/${id}` : '' %>
+     class="btn btn-tab nav-link no-outline p-15 <%= curentTab === 'questions' ? 'active defaul-cursor' : ''%>">
+     Questions
+    </a>
+    <div class="custom_div_inline <%= curentTab === 'questions' ? 'active' : ''%>"></div>
+  </li>
+  <li class="nav-item nav-tabs-exam <%= id ? '' : 'hide-tabs'%>">
+    <a
+     <%= curentTab !== 'answers' ? `href=/admin/answer/${id}` : '' %>
+     class="btn btn-tab nav-link no-outline p-15 <%= curentTab === 'answers' ? 'active defaul-cursor' : ''%>">
+     Answers
+    </a>
+    <div class="custom_div_inline <%= curentTab === 'answers' ? 'active' : ''%>"></div>
+  </li>
+</ul>

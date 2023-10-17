@@ -1,0 +1,91 @@
+<div class="row">
+  <div class="col-12 col-sm-12 col-md-8 col-lg-7 col-xl-5 from-content">
+    <div class="col-12">
+      <div class="mg-top-20 word-break-text">
+        <pre class="exam-question-content"><%= dataExamQuestion.content %></pre>
+        <% if(dataExamQuestion.points !== null) {%>
+          <pre class="exam-points"><%= numberFormat(dataExamQuestion.points) %> points</pre>
+        <% } %>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+    
+    <!-- show picture -->
+    <% if (dataExamQuestion.picturePath) {%>
+      <div class="col-12">
+        <div class="exam-img">
+          <img src="<%= dataExamQuestion.picturePath%>" class="img-thumbnail">
+        </div>
+      </div>
+      <div class="clearfix"></div>
+    <% } %>
+    <!-- end show picture -->
+
+    <!-- show audio -->
+    <% if (dataExamQuestion.audioPath) {%>
+      <div class="col-12">
+        <audio controls>
+          <source src="<%= dataExamQuestion.audioPath %>">
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+      <div class="clearfix"></div>
+    <% } %>
+    <!-- end show audio -->
+
+    <!-- answer -->
+    <div class="col-12 mg-top-20 word-break-text">
+      <!-- show input text -->
+        <% if (dataExamQuestion.answerType == 3) {%>
+          <exam-input
+            name="answerText_<%=dataExamQuestion.id%>"
+            id="<%=dataExamQuestion.id%>"
+            inputclass="no-outline"
+            @id-input-children="idInputChildren"
+            placeholder="Your answer"
+            value="<%= dataExamQuestion.answerDetail ? dataExamQuestion.answerDetail.answerByText : '' %>"
+          ></exam-input>
+          <div class="col-12 error">{{ errors.answerText['<%=dataExamQuestion.id%>_'] }}</div>
+        <% } %>
+      <!-- end show input text -->
+      <% if (dataExamQuestion.examQuestionOption && dataExamQuestion.examQuestionOption.length) {%>
+        <% for (examQuestionOption of dataExamQuestion.examQuestionOption) {%>
+          <!-- show radio -->
+          <% let type = 'radio'; %>
+          <% let name = `radio_${examQuestionOption.examQuestionId}`; %>
+          <% const index = dataExamQuestion.examQuestionOption.indexOf(examQuestionOption); %>
+          <!-- end show radio -->
+
+          <!-- show check-box -->
+            <% if (dataExamQuestion.answerType == 2) {%>
+              <% type = 'checkbox'; %>
+              <% name = `checkbox_${examQuestionOption.examQuestionId}`; %>
+            <% } %>
+          <!-- end show check-box -->
+          <% if (dataExamQuestion.answerType == 1 || dataExamQuestion.answerType == 2) {%>
+            <!-- show input hidden when not check -->
+            <exam-input-hidden
+              v-if="<%=index%> == 0"
+              name="<%=name%>"
+              value=""
+            ></exam-input-hidden>
+            <!--  -->
+            <exam-checked
+              type="<%=type%>"
+              name="<%=name%>"
+              value="<%=examQuestionOption.id%>"
+              text="<%=examQuestionOption.content%>"
+              id="ckbox-<%=examQuestionOption.id%>"
+              checkedflag="<%= processChecked(dataExamQuestion.answerDetail, examQuestionOption.id) %>"
+            ></exam-checked>
+          <% } %>
+        <% } %>
+      <% } %>
+    </div>
+    <!-- end answer -->
+
+    <!-- icon save status -->
+    <div class="col-12 fail-success"></div>
+    <!-- end icon save status -->
+  </div>
+</div>

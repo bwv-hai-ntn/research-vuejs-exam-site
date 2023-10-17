@@ -1,0 +1,31 @@
+<div class="row">
+  <div class="col-12 col-sm-12 col-md-8 col-lg-7 col-xl-5 from-content">
+      <div class="from-header"></div>
+      <div class="col-12">
+        <h2 class="from-title word-break-text">
+          <pre><%= exam.title %></pre>
+        </h2>
+
+        <%- errMessage.replace('exam.title', exam.title) %>
+      </div>
+  </div>
+</div>
+<script>
+  var pushState = '<%= pushState%>';
+  if (pushState && pushState.length > 0) {
+    window.history.pushState("", "", window.location.pathname.replace('/startTest/', pushState));
+  }
+</script>
+
+<%- contentFor('pageTitle') %>
+<%= exam.title + " - StartTest - Exam Site" %>
+
+<%- contentFor('pageDescription') %>
+<%= exam.description %>
+
+<%- contentFor('ogType') %>website
+<%- contentFor('ogSiteName') %>EXAM site
+<%- contentFor('ogTitle') %><%= exam.title %>
+<%- contentFor('ogDescription') %><%= exam.description %>
+<%- contentFor('ogUrl') %><%= locals.domain + '/startTest/' + exam.accessKey %>
+<%- contentFor('ogImage') %><%= exam.imagePath %>

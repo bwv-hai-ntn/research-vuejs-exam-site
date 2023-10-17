@@ -1,0 +1,138 @@
+.mg-5 .purple-text {
+    margin-top: -5px !important;
+}
+.line-two .among {
+    position: absolute;
+    right: 32%;
+    top: 18%;
+}
+.relative {
+    position: relative;
+}
+.icon-up {
+    position: absolute;
+    top: 0px;
+}
+.icon-up:hover {
+    color: rgb(103, 58, 183);
+    opacity: 1;
+}
+.icon-down:hover {
+    color: rgb(103, 58, 183);
+    opacity: 1;
+}
+.icon-down {
+    position: absolute;
+    top: 10px;
+}
+.icon-color {
+    color:#1a1a1a ;
+    opacity: 0.3;
+}
+.pd-3 {
+    padding-right: 3px;
+}
+
+input[type='number'] {
+    -moz-appearance:textfield;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+.tableFixHead { 
+    overflow-y: auto;
+    border-top: 1px solid #ced4da 
+}
+
+.tableFixHead thead th { 
+    position: sticky; 
+    top: 0px; 
+}
+
+.tableFixHead table { 
+    border-collapse: collapse; 
+    width: 100%; 
+    border-top: hidden; 
+}
+
+.tableFixHead th { 
+    background:white; 
+}
+
+.color-svg {
+    color: rgb(103, 58, 183) !important;
+    opacity: 1 !important;
+}
+
+.mg-pd-0 {
+    margin: 0px !important;
+    padding: 0px !important;
+}
+
+section.content {
+    padding: 0px !important;
+}
+
+.mgr-70 {
+  margin-right: 70px
+}
+
+.mgr-80 {
+    margin-right: 80px
+}
+
+.pd-15 .col-12.row {
+  margin-top: 15px !important
+}
+.pd-10 .col-12.row {
+  margin-top: 10px;
+}
+
+.col-6 {
+  flex: 0 0 66.67%;
+  max-width: 66.67% !important;
+}
+
+.bottom-header {
+  padding: 0px;
+  margin: 0px;
+  width: 98.5%;
+  z-index: 1000;
+  position: absolute;
+  top: 80px;
+  height: 10px;
+  background-color: white;
+  border-top: none !important;
+  border-bottom: 1px solid rgba(0,0,0,.1);
+}
+
+.max-content {
+  display: inline-block;
+  inline-size: max-content;
+}
+
+.w-150 {
+    width: 150px !important;
+    max-width: 150px !important;
+}
+
+.w-30 {
+    width: 30px !important;
+    max-width: 30px !important;
+}
+
+.w-170 {
+    width: 170px !important;
+    max-width: 170px !important;
+}
+
+.btn-copy-custom {
+    border-radius: 6px;
+}
+
+.btn-copy-custom svg {
+    margin-bottom: 4px;
+}

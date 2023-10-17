@@ -1,0 +1,156 @@
+<link rel="stylesheet" href="/css/answer/answerList.css">
+<input type="hidden" value="<%= messageList.processingFailed %>" disabled name="processingFailed">
+<input type="hidden" value="<%= messageList.sentEmailSuccessfully %>" disabled name="sentEmailSuccessfully">
+<%- include('../admin/common/tabs', {curentTab: 'answers', id: examId}) %>
+<section class="content">
+  <div class="col-12 row mess-submit hide">
+    <div class="col-11 mess-alert"></div>
+    <div class="col-1 close-icon" @click="closeMessage()">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1.5em" height="1.5em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 16 16"><g fill="#626262">
+        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8L4.646 5.354a.5.5 0 0 1 0-.708z"/></g>
+      </svg>
+    </div>
+  </div>
+  <div class="row row-first">
+      <div class="col-md-12 mg-pd-0">
+          <input type="hidden" value="<%= JSON.stringify(queryData) %>" disabled name="queryData">
+          <form method="get" @submit="searchForm" novalidate>
+              <div class="row">
+                  <div class="col-md-4 mg-5 mg-pd-0 pd-15">
+                      <!-- Exam title -->
+                      <exam-input
+                      labelname="Examinee name"
+                      name="examName"
+                      v-model="admin.examName"
+                      ></exam-input>
+                  </div>
+                  <div class="col-md-4 mg-5 mg-pd-0 pd-15">
+                      <!-- Access key -->
+                      <exam-input
+                      labelname="Examinee email"
+                      name="examEmail"
+                      v-model="admin.examEmail"
+                      ></exam-input>
+                  </div>
+                  <div class="col-md-4 mg-pd-0 pd-10">
+                    <!-- Access key -->
+                    <input-checkbox
+                    labelname="Status"
+                    name="status"
+                    v-model="admin.status"
+                    :options="<%= JSON.stringify(static.examStatusAnswer) %>"
+                    :value="admin.status"
+                    @statuschanged="admin.status = $event"
+                    >
+                    </input-checkbox>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4 line-two mg-pd-0">
+                  <input-from-to
+                  labelname="Total score"
+                  name="total"
+                  :valuefrom = "admin.totalFrom"
+                  :valueto = "admin.totalTo"
+                  @input-from = "admin.totalFrom = $event"
+                  @input-to = "admin.totalTo = $event"
+                  ></input-from-to>
+                </div>
+                <div class="col-md-4 line-two mg-5 mg-pd-0">
+                  <input-from-to
+                  labelname="Score percentage"
+                  name="percentage"
+                  :valuefrom = "admin.percentageFrom"
+                  :valueto = "admin.percentageTo"
+                  @input-from = "admin.percentageFrom = $event"
+                  @input-to = "admin.percentageTo = $event"
+                  ></input-from-to>
+                </div>
+                <div class="col-md-4 mg-pd-0 pd-10">
+                  <!-- Access key -->
+                  <input-checkbox
+                  labelname="Result"
+                  name="result"
+                  :options="<%= JSON.stringify(static.examListResultCheckBox) %>"
+                  v-model="admin.result"
+                  @statuschanged="admin.result = $event"
+                  >
+                  </input-checkbox>
+              </div>
+              </div>
+          </form>
+      </div>
+  </div> 
+  <%
+    let isShow = false;
+    if (exam.showResult === static.showResult.showSubmittedWork || 
+        exam.showResult === static.showResult.showCorrectAnswer) {
+          isShow = true;
+    }
+  %>
+  <div class="row row-search">
+      <div class="col-md-12 col-sm-12 col-xs-12 mg-pd-0">
+          <div class="table-responsive no-padding">
+            <exam-table
+            :static="<%= JSON.stringify(static) %>"
+            :exam="<%= JSON.stringify(exam) %>"
+            :show="<%= JSON.stringify(isShow) %>"
+            :data="<%= JSON.stringify(answers.rows) %>"
+            :completed="<%= JSON.stringify(countCompleted) %>"
+            :straswers="<%= JSON.stringify(strPassedAnswers) %>"
+            :count="<%= JSON.stringify(answers.count) %>">
+        </exam-table>
+          </div>
+      </div>
+  </div>
+  <form ref="form" novalidate="true" method="POST"></form>
+</section>
+<%- contentFor('pageTitleHeader') %>
+<%= examId ? exam.title : 'Create an Exam' %>
+<%- contentFor('deletedExamMess') %>    
+<%= typeof deletedExamMess !== 'undefined' ? deletedExamMess : '' %>
+<%- contentFor('userImage') %>
+<%= adminInfo.userImage %> 
+<%- contentFor('userName') %>
+<%= adminInfo.userName %> 
+<%- contentFor('userAuthor') %>
+<%= adminInfo.userAuthor %> 
+<%- contentFor('displayId') %>
+exams_list
+<%- contentFor('permissionSideBar') %>
+<%= adminInfo.userAuthor !== 'ADMIN' ? 'hidden-side' : '' %> 
+<%- contentFor('copyBtn') %>
+<exam-button-icon
+  v-if="<%=examId !== undefined%>"
+  type="button"
+  id="copy_btn"
+  iconcopy="true"
+  customclass="btn-header"
+>
+</exam-button-icon>
+<%- contentFor('deleteBtn') %>
+<exam-button-icon
+  v-if="<%=examId !== undefined && (exam && exam.deletedAt === null)%>"
+  type="button"
+  id="delete_btn"
+  icondelete="true"
+  customclass="btn-header"
+>
+</exam-button-icon>
+<%- contentFor('revertBtn') %>
+<exam-button-icon
+  v-if="<%=examId !== undefined && (exam && exam.deletedAt !== null)%>"
+  type="button"
+  id="revert_btn"
+  iconrevert="true"
+  customclass="btn-header"
+>
+</exam-button-icon>
+<script src="/js/lib/lodash.min.js"></script>
+<script src="/js/lib/moment.min.js"></script>
+<script src="/js/lib/jquery-ui.js"></script>
+<script src="/js/lib/lodash.min.js"></script>
+<script src="/js/components/sectionsTree.js"></script>
+<script src="/js/admin/answer/answerList.js"></script>
+
+

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title><%= typeof pageTitle !== 'undefined' ? pageTitle : 'Admin - Exam Site' %></title>
+
+  <link rel="shortcut icon" href="/favicon.ico">
+  <!-- bootstrap -->
+  <link rel="stylesheet" href="/css/lib/bootstrap.min.css">
+  <!-- Custom style -->
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/common.css">
+<% if (locals.nodeEnv == 'production') { %>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BQV8KME6SL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-BQV8KME6SL');
+  </script>
+<% } else { %>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GE1ZK0EJND"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-GE1ZK0EJND');
+  </script>
+<% } %>
+ 
+  <%- typeof pageCSS !== 'undefined' ? pageCSS : '' %>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+  <div class="loading">Loading&#8230;</div>
+  <div class="d-flex" id="wrapper">
+      <%- include('./sidebar') %>
+      <!-- Page Content -->
+      <div id="page-content-wrapper" class="vue-app">
+        <%- include('./header') %>
+        <div class="content-wrapper">
+          <%- body %>
+        </div>
+      </div>
+  </div>
+  <%- include('./adminScripts') %>
+  <%- script %>
+</body>
+
+</html>

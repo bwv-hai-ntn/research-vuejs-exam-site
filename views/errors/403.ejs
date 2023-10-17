@@ -1,0 +1,37 @@
+<style>
+    .content {
+      text-align: center;
+      padding-top: 10vh;
+      background-color: #F0EBF8 !important;
+      min-height: 1200px !important;
+    }
+    .error-detail {
+      padding: 10px;
+      border: 1px solid #555;
+      background-color: #fff;
+      text-align: left;
+      font-family: monospace;
+    }
+  </style>
+  <!-- Main content -->
+  <section class="content">
+    <img src="/img/error.png" alt="error">
+    <div class="error-page">
+      <div class="error-title">
+        <h3><i class="fa fa-warning text-yellow"></i> ACCESS DENIED</h3>
+      </div>
+      <!-- /.error-content -->
+    </div>
+    <!-- /.error-page -->
+  </section>
+  
+  <%- contentFor('displayId') %>
+  error
+  <%- contentFor('userImage') %>
+  <%= adminInfo.userImage %> 
+  <%- contentFor('userName') %>
+  <%= adminInfo.userName %> 
+  <%- contentFor('userAuthor') %>
+  <%= adminInfo.userAuthor %> 
+  <%- contentFor('permissionSideBar') %>
+  <%= adminInfo.userAuthor !== 'ADMIN' ? 'hidden-side' : '' %> 

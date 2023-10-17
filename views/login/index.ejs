@@ -1,0 +1,25 @@
+<div class="row full-height" style="background-color: #737373;">
+  <div class="col-12 col-sm-12 col-md-8 col-lg-7 col-xl-5 div-center">
+      <!-- <div class="btn-login">
+        <a href="/login/google">
+          <button type="button" class="loginBtn loginBtn--google">
+            Login with Google
+          </button>
+        </a>
+        -->
+        <div class="old-login">
+          <h3>Sign in to continue</h3>
+            <%= messageList.signinRequired %>
+          <br><br>
+          <div class="right">
+            <!--<a href="/login/google">SIGN IN</a> -->
+            <form action="/login/google" method="post">
+              <button type="submit" class="loginBtn loginBtn--google">
+                SIGN IN
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>

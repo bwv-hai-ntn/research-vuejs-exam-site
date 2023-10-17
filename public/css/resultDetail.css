@@ -1,0 +1,25 @@
+.correct-div-container {
+  margin-left: -20px;
+}
+
+@media screen and (max-width: 600px) {
+  .col-3 {
+    flex: 0 0 30%;
+    max-width: 30%;
+  }
+
+  .col-9 {
+    flex: 0 0 70%;
+    max-width: 70%;
+  }
+
+  .col-12 {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+
+  .correct-div-container {
+    padding-left: 20px;
+    margin-left: 0px;
+  }
+}

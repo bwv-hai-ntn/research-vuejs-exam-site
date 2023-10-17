@@ -1,0 +1,70 @@
+<!-- Not Login Layout -->
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+  <meta name="generator" content="Hugo 0.101.0">
+  <meta name="description" content="<%= typeof pageDescription !== 'undefined' ? truncate(pageDescription, 100) : '' %>">
+  <title><%= typeof pageTitle !== 'undefined' ? pageTitle : 'Exam Site' %></title>
+  <meta property="og:type" content="<%= typeof ogType !== 'undefined' ? ogType : '' %>">
+  <meta property="og:site_name" content="<%= typeof ogSiteName !== 'undefined' ? ogSiteName : '' %>">
+  <meta property="og:title" content="<%= typeof ogTitle !== 'undefined' ? ogTitle : '' %>">
+  <meta property="og:description" content="<%- typeof ogDescription !== 'undefined' ? ogDescription : '' %>">
+  <meta property="og:url" content="<%= typeof ogUrl !== 'undefined' ? ogUrl : '' %>">
+  <meta property="og:image" content="<%= typeof ogImage !== 'undefined' ? ogImage : '' %>">
+
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/custom.css">
+
+  <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/album/">
+  <link rel="stylesheet" href="/css/lib/bootstrap.5.2.2.min.css">
+
+  <meta name="theme-color" content="#712cf9">
+  <style>
+    
+  </style>
+
+<% if (locals.nodeEnv == 'production') { %>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BQV8KME6SL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-BQV8KME6SL');
+  </script>
+<% } else { %>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GE1ZK0EJND"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-GE1ZK0EJND');
+  </script>
+<% } %>
+  
+</head>
+
+<body data-new-gr-c-s-check-loaded="14.1079.0" data-gr-ext-installed="">
+  <div class="vue-app">
+    <div class="loading" hidden>Loading&#8230;</div>
+    <%- include('userHeader') %>
+    <main>
+      <%- body %>
+    </main>
+    <%- include('userSitemap') %>
+  </div>
+</body>
+<grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
+
+<%- include('./adminScripts') %>
+
+<script src="/js/lib/lodash.min.js"></script>
+<script src="/js/lib/bootstrap.5.2.2.bundle.min.js"></script>
+<script src="/js/lib/loadingoverlay.min.js"></script>
+
+<%- script %>
+
+</html>

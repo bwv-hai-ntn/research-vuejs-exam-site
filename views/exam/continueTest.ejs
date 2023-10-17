@@ -1,0 +1,48 @@
+<input type="hidden" value="<%= JSON.stringify(exam) %>" disabled name="examData">
+
+<form method="post" ref="form" @submit="checkForm">
+  <div class="row">
+    <div class="col-12 col-sm-12 col-md-8 col-lg-7 col-xl-5 from-content">
+        <div class="from-header"></div>
+        <div class="col-12">
+          <h2 class="from-title word-break-text">
+            <pre><%= exam.title %></pre>
+          </h2>
+          <%- errMessage %>
+        </div>
+    </div>
+  </div>
+  <div class="row">
+    <br /><br /><br />
+    <div style="margin: auto">
+      <exam-button
+      :type="'submit'"
+      :class="'btn btn-info'"
+      :id="'btn-continue'"
+      :text="'Continue'"
+    ></exam-button>
+    <exam-button
+      v-if="exam.testTimeSetting !== <%= JSON.stringify(static.testTimeSetting['Set based on test']) %> && exam.testTimeSetting !== <%= JSON.stringify(static.testTimeSetting['Set based on section']) %>"
+      :exam="exam.id"
+      :type="'submit'"
+      :class="'btn btn-info'"
+      :id="'btn-new-test'"
+      :text="'Start new test'"
+    ></exam-button>
+    </div>
+  </div>
+</form>
+<script src="/js/startTest/vue.components.js"></script>
+
+<%- contentFor('pageTitle') %>
+<%= exam.title + " - StartTest - Exam Site" %>
+
+<%- contentFor('pageDescription') %>
+<%= exam.description %>
+
+<%- contentFor('ogType') %>website
+<%- contentFor('ogSiteName') %>EXAM site
+<%- contentFor('ogTitle') %><%= exam.title %>
+<%- contentFor('ogDescription') %><%= exam.description %>
+<%- contentFor('ogUrl') %><%= locals.domain + '/startTest/' + exam.accessKey %>
+<%- contentFor('ogImage') %><%= exam.imagePath %>

@@ -1,0 +1,142 @@
+/* header */
+.navbar {
+    border-bottom: 1px solid #ddd9d9 !important;
+}
+
+.mg-pd-0 {
+    margin: 0px !important;
+    padding: 0px !important;
+}
+
+.total-result {
+    padding-left: 13px;
+}
+
+.tableFixHead { 
+    overflow-y: auto;
+    border-top: 1px solid #ced4da 
+}
+
+.tableFixHead thead th { 
+    position: sticky; 
+    top: 0px; 
+}
+
+.tableFixHead table { 
+    border-collapse: collapse; 
+    width: 100%; 
+    border-top: hidden; 
+}
+
+.tableFixHead th { 
+    background:white;
+}
+
+.bottom-header {
+  padding: 0px;
+  margin: 0px;
+  position: absolute;
+  z-index: 100;
+  top: 80px;
+  height: 10px;
+  background-color: white;
+  border-top: none !important;
+  border-bottom: 1px solid rgba(0,0,0,.1);
+}
+.bottom-header-exam-list {
+  padding: 0px;
+  margin: 0px;
+  position: absolute;
+  width: 98.5%;
+  z-index: 100;
+  top: 117px;
+  height: 10px;
+  background-color: white;
+  border-top: none !important;
+  border-bottom: 1px solid rgba(0,0,0,.1);
+}
+
+.pd-0 {
+    padding: 0px !important;
+}
+section.content {
+    padding: 0px;
+}
+
+.svg-add {
+    width: 50px;
+    border-radius: 50%;
+    background: gainsboro;
+}
+
+.svg-plus:hover {
+    cursor: pointer;
+}
+
+.category .col-6 {
+    flex: 0 0 66.666667%;
+    max-width: 66.666667%;
+}
+
+.category .col-4 .purple-text {
+  margin-top: -5px !important; 
+}
+
+.custom-btn-copy {
+    border-radius: 6px;
+}
+
+.custom-btn-copy svg {
+    margin-bottom: 4px;
+}
+
+.text-add {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 5px;
+    padding-left: 5px;
+}
+
+.div-bi-plus {
+  display: flex;
+  margin-right: 20px;
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+
+.custom-col .col-12.row .col-4 {
+  flex: 0 0 25%;
+  max-width: 25%;
+}
+
+.custom-col .col-12.row .col-6 {
+  flex: 0 0 75%;
+  max-width: 75%;
+}
+
+.mg-t-10 {
+  margin-top: 10px;
+}
+
+.w-270 {
+  width: 270px !important;
+  max-width: 270px !important;
+}
+
+.text-vertical th {
+  vertical-align: middle !important;
+}
+
+.exam-title .col-12 .col-4 {
+  flex: 0 0 22%;
+  max-width: 22%;
+}
+
+.form-category {
+  margin-top: 10px;
+}
+
+.form-category .col-12 .col-4 {
+  flex: 0 0 25%;
+  max-width: 25%;
+}

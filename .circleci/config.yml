@@ -1,0 +1,208 @@
+version: 2.1
+
+orbs:
+  aws-cli: circleci/aws-cli@4.0.0
+
+jobs:
+  build:
+    docker:
+      - image: cimg/node:14.21.3
+    steps:
+      - checkout
+      - run:
+          name: node version
+          command: node -v
+      - restore_cache:
+          name: Restore NPM Package Cache
+          key: npm-packages-{{ checksum "package-lock.json" }}
+      - run:
+          name: Install Dependencies
+          command: npm ci
+      - save_cache:
+          name: Save NPM Package Cache
+          key: npm-packages-{{ checksum "package-lock.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: compile typescript
+          command: npm run build
+
+      - run:
+          name: CIRCLE_BRANCH log
+          command: echo $CIRCLE_BRANCH
+  test:
+    docker:
+      - image: cimg/node:14.21.3
+    steps:
+      - checkout
+      - restore_cache:
+          name: Restore NPM Package Cache
+          key: npm-packages-{{ checksum "package-lock.json" }}
+      - run:
+          name: run check
+          command: npm run check
+      - run:
+          name: run test
+          command: npm run test:coverage
+    
+  deploy-dev:
+    docker:
+      - image: cimg/node:14.21.3
+    steps:
+      - checkout
+      - run:
+          name: Set access key, secret key, region aws
+          command: |
+            echo 'export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_DEV' >> "$BASH_ENV"
+            echo 'export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_DEV' >> "$BASH_ENV"
+            echo 'export AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION_DEV' >> "$BASH_ENV"
+            source "$BASH_ENV"
+      - aws-cli/install
+      - aws-cli/setup
+      - restore_cache:
+          name: Restore NPM Package Cache
+          key: npm-packages-{{ checksum "package-lock.json" }}
+      
+      - run:
+          name: Add inbound rule on security group
+          command: |
+            JOB_IP=$(curl -sS https://api64.ipify.org)
+            aws ec2 authorize-security-group-ingress --group-id $SECURITY_GROUP_ID_DEV --protocol tcp --port 22 --cidr $JOB_IP/32
+
+      - run:
+          name: SSH and Deploy to Server
+          command: |
+            PRIVATE_KEY=$(echo $SSH_PRIVATE_KEY_ENCODE_DEV | base64 --decode)
+            echo "$PRIVATE_KEY" > key.pem && chmod 400 key.pem
+            ssh -o StrictHostKeyChecking=no -i key.pem "${SSH_USER_DEV}@${SSH_HOST_DEV}" "cd $ROOT_DIRECTORY_SOURCE_DEV && sudo git pull "${EXAM_SITE_GIT_REPO} ${CIRCLE_BRANCH}" && sudo chmod u+x config-dev.sh && bash config-dev.sh"
+
+      - run:
+          name: migration database
+          command: |
+            PRIVATE_KEY=$(echo $SSH_PRIVATE_KEY_ENCODE_DEV | base64 --decode)
+            echo "$PRIVATE_KEY" > key.pem && chmod 400 key.pem
+            ssh -o StrictHostKeyChecking=no -i key.pem "${SSH_USER_DEV}@${SSH_HOST_DEV}" "cd $ROOT_DIRECTORY_SOURCE_DEV && export NODE_ENV=$NODE_ENV_DEV && export MYSQL_USERNAME=$MYSQL_USERNAME_DEV && export MYSQL_PASSWORD=$MYSQL_PASSWORD_DEV && export MYSQL_PORT=$MYSQL_PORT_DEV && export MYSQL_HOST=$MYSQL_HOST_DEV && export MYSQL_DATABASE=$MYSQL_DATABASE_DEV && npm run migrate"
+
+      - run:
+          name: Remove inbound rule on security group
+          command: |
+            JOB_IP=$(curl -sS https://api64.ipify.org)
+            aws ec2 revoke-security-group-ingress --group-id $SECURITY_GROUP_ID_DEV --protocol tcp --port 22 --cidr $JOB_IP/32
+  
+  deploy-staging:
+    docker:
+      - image: cimg/node:14.21.3
+    steps:
+      - checkout
+      - run:
+          name: Set access key, secret key, region aws
+          command: |
+            echo 'export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_STAGING' >> "$BASH_ENV"
+            echo 'export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_STAGING' >> "$BASH_ENV"
+            echo 'export AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION_STAGING' >> "$BASH_ENV"
+            source "$BASH_ENV"
+      - aws-cli/install
+      - aws-cli/setup
+      - restore_cache:
+          name: Restore NPM Package Cache
+          key: npm-packages-{{ checksum "package-lock.json" }}
+      
+      - run:
+          name: Add inbound rule on security group
+          command: |
+            JOB_IP=$(curl -sS https://api64.ipify.org)
+            aws ec2 authorize-security-group-ingress --group-id $SECURITY_GROUP_ID_STAGING --protocol tcp --port 22 --cidr $JOB_IP/32
+
+      - run:
+          name: SSH and Deploy to Server
+          command: |
+            PRIVATE_KEY=$(echo $SSH_PRIVATE_KEY_ENCODE_STAGING | base64 --decode)
+            echo "$PRIVATE_KEY" > key.pem && chmod 400 key.pem
+            ssh -o StrictHostKeyChecking=no -i key.pem "${SSH_USER_STAGING}@${SSH_HOST_STAGING}" "cd $ROOT_DIRECTORY_SOURCE_STAGING && sudo git pull "${EXAM_SITE_GIT_REPO} ${CIRCLE_BRANCH}" && sudo chmod u+x config-staging.sh && bash config-staging.sh"
+
+      - run:
+          name: migration database
+          command: |
+            PRIVATE_KEY=$(echo $SSH_PRIVATE_KEY_ENCODE_STAGING | base64 --decode)
+            echo "$PRIVATE_KEY" > key.pem && chmod 400 key.pem
+            ssh -o StrictHostKeyChecking=no -i key.pem "${SSH_USER_STAGING}@${SSH_HOST_STAGING}" "cd $ROOT_DIRECTORY_SOURCE_STAGING && export NODE_ENV=$NODE_ENV_STAGING && export MYSQL_USERNAME=$MYSQL_USERNAME_STAGING && export MYSQL_PASSWORD=$MYSQL_PASSWORD_STAGING && export MYSQL_PORT=$MYSQL_PORT_STAGING && export MYSQL_HOST=$MYSQL_HOST_STAGING && export MYSQL_DATABASE=$MYSQL_DATABASE_STAGING && npm run migrate"
+      
+      - run:
+          name: Remove inbound rule on security group
+          command: |
+            JOB_IP=$(curl -sS https://api64.ipify.org)
+            aws ec2 revoke-security-group-ingress --group-id $SECURITY_GROUP_ID_STAGING --protocol tcp --port 22 --cidr $JOB_IP/32
+
+  deploy-production:
+    docker:
+      - image: cimg/node:14.21.3
+    steps:
+      - checkout
+      - run:
+          name: Set access key, secret key, region aws
+          command: |
+            echo 'export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_PRODUCTION' >> "$BASH_ENV"
+            echo 'export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_PRODUCTION' >> "$BASH_ENV"
+            echo 'export AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION_PRODUCTION' >> "$BASH_ENV"
+            source "$BASH_ENV"
+      - aws-cli/install
+      - aws-cli/setup
+      - restore_cache:
+          name: Restore NPM Package Cache
+          key: npm-packages-{{ checksum "package-lock.json" }}
+      
+      - run:
+          name: Add inbound rule on security group
+          command: |
+            JOB_IP=$(curl -sS https://api64.ipify.org)
+            aws ec2 authorize-security-group-ingress --group-id $SECURITY_GROUP_ID_PRODUCTION --protocol tcp --port 22 --cidr $JOB_IP/32
+
+      - run:
+          name: SSH and Deploy to Server
+          command: |
+            PRIVATE_KEY=$(echo $SSH_PRIVATE_KEY_ENCODE_PRODUCTION | base64 --decode)
+            echo "$PRIVATE_KEY" > key.pem && chmod 400 key.pem
+            ssh -o StrictHostKeyChecking=no -i key.pem "${SSH_USER_PRODUCTION}@${SSH_HOST_PRODUCTION}" "cd $ROOT_DIRECTORY_SOURCE_PRODUCTION && sudo git pull "${EXAM_SITE_GIT_REPO} ${CIRCLE_BRANCH}" && sudo chmod u+x config-production.sh && bash config-production.sh"
+
+      - run:
+          name: migration database
+          command: |
+            PRIVATE_KEY=$(echo $SSH_PRIVATE_KEY_ENCODE_PRODUCTION | base64 --decode)
+            echo "$PRIVATE_KEY" > key.pem && chmod 400 key.pem
+            ssh -o StrictHostKeyChecking=no -i key.pem "${SSH_USER_PRODUCTION}@${SSH_HOST_PRODUCTION}" "cd $ROOT_DIRECTORY_SOURCE_PRODUCTION && export NODE_ENV=$NODE_ENV_PRODUCTION && export MYSQL_USERNAME=$MYSQL_USERNAME_PRODUCTION && export MYSQL_PASSWORD=$MYSQL_PASSWORD_PRODUCTION && export MYSQL_PORT=$MYSQL_PORT_PRODUCTION && export MYSQL_HOST=$MYSQL_HOST_PRODUCTION && export MYSQL_DATABASE=$MYSQL_DATABASE_PRODUCTION && npm run migrate"
+
+      - run:
+          name: Remove inbound rule on security group
+          command: |
+            JOB_IP=$(curl -sS https://api64.ipify.org)
+            aws ec2 revoke-security-group-ingress --group-id $SECURITY_GROUP_ID_PRODUCTION --protocol tcp --port 22 --cidr $JOB_IP/32
+
+workflows:
+  version: 2
+
+  # Name of workflow
+  build-test:
+    # List of jobs that will run
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - deploy-dev:
+          requires:
+            - test
+          filters:
+            branches:
+              only: develop
+      - deploy-staging:
+          requires:
+            - test
+          filters:
+            branches:
+              only: staging
+      - deploy-production:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master

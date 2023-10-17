@@ -1,0 +1,54 @@
+<main>
+  <div class="album py-2 bg-light">
+    <div class="container word-break-word">
+        <%- disableScript(pickup.pageDescription) %>
+    </div>
+
+    <div class="container">
+      <div class="container px-1 py-1" id="icon-grid">
+        <h3 class="pb-2 border-bottom word-break-word">
+          <%= pickup.title%>
+        </h3>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-2 py-3">
+          <% if (pickup.pickupDetail.length> 0) { %>
+            <% for (pickupDetail of pickup.pickupDetail) { %>
+              <div class="col d-flex align-items-start">
+                <svg class="bi text-muted flex-shrink-0 me-3" width="1.75em" height="1.75em">
+                  <use xlink:href="#bootstrap"></use>
+                </svg>
+                <div>
+                  <a class="title-link" href="<%= pickupDetail.exam ? '/startTest/' + pickupDetail.exam.accessKey : '#' %>">
+                    <h2 class="fw-bold mb-0 fs-4 word-break-word">
+                      <%= pickupDetail.title || (pickupDetail.exam ? pickupDetail.exam.title : '' ) %>
+                    </h2>
+                  </a>
+                  <p class="break-line-text word-break-word"><%= pickupDetail.note || (pickupDetail.exam ? pickupDetail.exam.description : '' ) %></p>
+                </div>
+              </div>
+              <% }} else { %>
+                <p>
+                  <%= messageList.noRecord %>
+                </p>
+                <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/js/pickup/index.js"></script>
+<script src="/js/lib/moment.min.js"></script>
+
+<%- contentFor('pageTitle') %>
+<%= pickup.title + " - Pickup - Exam Site" %>
+
+<%- contentFor('pageDescription') %>
+<%= pickup.note %>
+
+<%- contentFor('ogType') %>website
+<%- contentFor('ogSiteName') %>EXAM site
+<%- contentFor('ogTitle') %><%= pickup.title %>
+<%- contentFor('ogDescription') %><%= pickup.note %>
+<%- contentFor('ogUrl') %><%= locals.domain + '/pickup/' + pickup.id %>
+<%- contentFor('ogImage') %><%= pickup.imagePath %>

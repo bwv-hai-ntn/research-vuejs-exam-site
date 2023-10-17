@@ -1,0 +1,129 @@
+<!-- Time left -->
+<% if (timeLeft !== false) {%>
+<div class="time-left">
+  <p>Time left</p>
+  <h3 ref="countdown"><%= timeLeft %></h3>
+</div>
+<% } else { %>
+<div></div>
+<% } %>
+<!-- End time left -->
+<div class="row">
+  <div id="<%= (timeLeft !== false) ? 'title-testing' : '' %>" class="col-12 col-sm-12 col-md-8 col-lg-7 col-xl-5 from-content">
+      <div class="from-header"></div>
+      <div class="col-12">
+        <h2 class="from-title word-break-text">
+          <pre><%= exam.title %></pre>
+        </h2>
+      </div>
+        <% if (exam.signinRestrict === 1) {%>
+        <div class="col-12">
+          <p style="margin-bottom: 0;">Your name: <b><%= user.displayName%></b><br>Your email: <b><%= user.email%></b></p>
+        </div>
+      <% } else { %>
+        <div class="col-12">
+          <p style="margin-bottom: 0;">Your name: <b><%= answer.name%></b></p>
+        </div>
+      <% } %>
+  </div>
+</div>
+
+<% if (examSections && examSections.length > 0) { %>
+  <% for (examSection of examSections) { %>
+    <% const idx = examSections.indexOf(examSection) %>
+    <form class="<%= idx === (currentPage ? Number(currentPage) : 0) ? '' : 'hide' %>" exam-section-id="<%=examSection.id%>" method="post" @submit.enter.prevent="denyEnter">
+      <!-- examSection -->
+      <% if (examSection.title !== null) { %>
+        <div class="row">
+          <div class="col-12 col-sm-12 col-md-8 col-lg-7 col-xl-5 from-content">
+            <div class="from-header">
+              <div class="col-12">
+                <h3 class="exam-section-title word-break-text">
+                  <pre><%= examSection.title %></pre>
+                </h3>
+              </div>
+            </div>
+            <div class="col-12">
+              <pre><%= examSection.description %></pre>
+            </div>
+          </div>
+        </div>
+      <% } %>
+      <!-- end examSection -->
+
+      <!-- content question  -->
+      <% const examQuestions = examSection.examQuestions || [] %>
+      <% for (examQuestion of examQuestions) { %>
+        <%- include('./form_question.ejs', {dataExamQuestion: examQuestion}) %>
+        <% if (examQuestion.questionChild !== undefined) { %>
+          <% for (questionChild of examQuestion.questionChild) { %>
+            <%- include('./form_question.ejs', {dataExamQuestion: questionChild}) %>
+          <% } %>    
+        <% } %>  
+      <% } %>
+      <!-- end content question -->
+      <!-- <%
+      let isShow = false;
+      let email = '';
+      if (typeof answer.email !== 'undefined') {
+        email = answer.email;
+      }
+      if (exam.showResult == static.showResult.show ||
+          exam.showResult == static.showResult.showSubmittedWork || 
+          exam.showResult == static.showResult.showCorrectAnswer) {
+        isShow = true;
+      }
+      %>
+      <% if (currentPage == examSections.length - 1 && isShow) {%>
+      <exam-switch 
+      :restrict="<%= JSON.stringify(exam.signinRestrict) %>"
+      :email="<%= JSON.stringify(email) %>"
+      >
+      </exam-switch>
+      <% } %> -->
+    </form>
+  <% } %>
+<% } %>
+
+<input type="hidden" value="<%= JSON.stringify(exam) %>" disabled name="examHidden">
+
+<div class="row">
+  <div class="col-12 col-sm-12 col-md-8 col-lg-7 col-xl-5 div-center btn-next-pre">
+    <br />
+    <exam-button
+      v-if="<%=exam.testTimeSetting !== static.testTimeSetting['Set based on section'] %>"
+      :type="'button'"
+      :class="'btn btn-light <%= currentPage > 0 ? 'show' : 'hide' %>'"
+      :id="'btn-back'"
+      :text="'Back'"
+    ></exam-button>
+
+    <exam-button
+      :type="'button'"
+      :class="'btn btn-light <%= examSections.length > 1 && currentPage < examSections.length - 1 ? '' : 'hide' %>'"
+      :id="'btn-next'"
+      :text="'Next'"
+    ></exam-button>
+    <exam-button
+      :type="'button'"
+      :class="'btn btn-info float-right <%= currentPage == examSections.length - 1 ? '' : 'hide' %>'"
+      :id="'btn-submit'"
+      :text="'Submit'"
+    ></exam-button>
+  </div>
+  <div class="clearfix"></div>
+</div>
+<br />
+<div class="row" ref="access-key" access-key="<%= exam.accessKey %>" ></div>
+<!-- alert popup -->
+<%- include('./alertPopup.ejs') %>
+<script src="/js/lib/moment.min.js"></script>
+<script src="/js/testing/vue.components.js"></script>
+<link rel="stylesheet" href="/css/lib/font-awesome.min.css">
+<link rel="stylesheet" href="/css/testing.css">
+
+<%- contentFor('pageTitle') %>
+<%= exam.title + " - Testing - Exam Site" %>
+
+<%- contentFor('pageDescription') %>
+<%= exam.description %>

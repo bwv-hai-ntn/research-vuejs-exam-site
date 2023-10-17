@@ -1,0 +1,154 @@
+<div class="col-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 from-content content-admin">
+    <% let text_color = 'default-text'; %>
+    <% if (dataExamQuestion.answerType !== 0 && dataExamQuestion.points) { %>
+        <% text_color = 'wrong-text' %>
+        <% if (dataExamQuestion.answerDetail) { %>
+            <% if (dataExamQuestion.answerDetail.score) { %> 
+                <% text_color = 'green-text' %>
+            <% } else if (dataExamQuestion.answerDetail.score === null) { %>
+                <% text_color = 'default-text'; %>
+            <% } %>
+        <% } %>
+    <% } %>
+    <label class="col-12 word-break-text row padding-custom">
+        <div class="col-9 <%= text_color %>">
+            <% if (text_color === 'green-text') { %>
+                <icon-correct></icon-correct>
+            <% } else if (text_color === 'wrong-text') { %>
+                <icon-wrong></icon-wrong>
+            <% } %>
+            <span style="font-size: 16px;">
+                <%- dataExamQuestion.content ? nl2br(dataExamQuestion.content) : '' %>
+            </span>
+        </div>
+        <div class="col-3" style="text-align: right; font-weight: 500;">
+            <% if (dataExamQuestion.points !== null && dataExamQuestion.answerType !== 0) { %>
+                <%= dataExamQuestion.answerDetail ? (dataExamQuestion.answerDetail.score !== null ? numberFormat(dataExamQuestion.answerDetail.score) : '0') : '0' %> of <%= dataExamQuestion.points ? numberFormat(dataExamQuestion.points) : '' %> points
+            <% } %>
+        </div>
+    </label>
+    <!-- show picture -->
+    <% if (dataExamQuestion.picturePath) { %>
+      <div class="col-12">
+        <div class="exam-img">
+          <img src="<%= dataExamQuestion.picturePath%>" class="img-thumbnail">
+        </div>
+      </div>
+      <div class="clearfix"></div>
+    <% } %>
+    <!-- end show picture -->
+
+    <!-- show audio -->
+    <% if (dataExamQuestion.audioPath) {%>
+      <div class="col-12">
+        <audio controls>
+          <source src="<%= dataExamQuestion.audioPath %>">
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+      <div class="clearfix"></div>
+    <% } %>
+    <!-- end show audio -->
+    <!-- answer -->
+    <div class="col-12 word-break-text">
+        <!-- show input text -->
+        <% if (dataExamQuestion.answerType == 3) { %>
+            <% let colorClass = 'wrong-background'; %>
+            <% if (dataExamQuestion.answerDetail) { %> 
+                <% if (dataExamQuestion.answerDetail.answerByText === dataExamQuestion.rightAnswerByText) {%> 
+                    <% colorClass = 'right-background' %> 
+                <% } %> 
+            <% } %> 
+            <exam-input-nolabel
+              name="answerText_<%=dataExamQuestion.id%>"
+              placeholder="Your answer"
+              value="<%= dataExamQuestion.answerDetail ? dataExamQuestion.answerDetail.answerByText : '' %>"
+              iconflag="<%= colorClass === 'right-background' ?  'true' : 'false' %>"
+              colorclass="<%= colorClass %> mgt-0"
+            ></exam-input-nolabel>
+            <% if (!dataExamQuestion.answerDetail || (dataExamQuestion.answerDetail && dataExamQuestion.answerDetail.score === 0)) { %> 
+                <div class="col-12" style="margin-left: -20px;">
+                    <div class="correct-div">
+                        Correct answer
+                    </div>
+                    <div class="col-12">
+                        <%= dataExamQuestion.rightAnswerByText ? dataExamQuestion.rightAnswerByText : '' %>
+                    </div>
+                </div>
+            <% } %> 
+        <% } %>
+        <!-- end show input text -->
+        <% if (dataExamQuestion.examQuestionOption && dataExamQuestion.examQuestionOption.length) { %>
+            <% for (examQuestionOption of dataExamQuestion.examQuestionOption) {%>
+              <!-- show radio -->
+              <% let type = 'radio'; %>
+              <% let name = `radio_${examQuestionOption.examQuestionId}`; %>
+              <% const index = dataExamQuestion.examQuestionOption.indexOf(examQuestionOption); %>
+              <!-- end show radio -->
+    
+              <!-- show check-box -->
+                <% if (dataExamQuestion.answerType == 2) { %>
+                  <% type = 'checkbox'; %>
+                  <% name = `checkbox_${examQuestionOption.examQuestionId}`; %>
+                <% } %>
+              <!-- end show check-box -->
+              <% if (dataExamQuestion.answerType == 1 || dataExamQuestion.answerType == 2) { %>
+                <% let colorClassBox = ''; if (processChecked(dataExamQuestion.answerDetail, examQuestionOption.id) === 'checked') { %> 
+                    <% if (examQuestionOption.rightAnswer === 1) { %> 
+                        <% colorClassBox = 'right-background' %> 
+                    <% } %> 
+                    <% if (examQuestionOption.rightAnswer !== 1) { %> 
+                        <% colorClassBox = 'wrong-background' %> 
+                    <% } %> 
+                <% } %> 
+                <exam-checked
+                  type="<%=type%>"
+                  value="<%=examQuestionOption.id%>"
+                  text="<%= examQuestionOption.content %>"
+                  id="ckbox-<%=examQuestionOption.id%>"
+                  disabled="disabled"
+                  checkedflag="<%= processChecked(dataExamQuestion.answerDetail, examQuestionOption.id) %>"
+                  iconflag="<%= processChecked(dataExamQuestion.answerDetail, examQuestionOption.id) === 'checked' ? (examQuestionOption.rightAnswer === 1 ? 'true' : 'false')  : '' %>"
+                  colorclass="<%= colorClassBox %>"
+                ></exam-checked>
+              <% } %>
+            <% } %>
+            <!-- show correct answer -->
+            <% if (!dataExamQuestion.answerDetail || (dataExamQuestion.answerDetail && dataExamQuestion.answerDetail.score === 0)) { %> 
+                <% if (dataExamQuestion.answerType == 1 || dataExamQuestion.answerType == 2) {%>
+                    <div class="col-12" style="margin-left: -20px;">
+                        <div class="correct-div">
+                            Correct answer
+                        </div>
+                        <% for (examQuestionOption of dataExamQuestion.examQuestionOption) {%>
+                            <!-- show radio -->
+                            <% let type = 'radio'; %>
+                            <% let name = `radio_${examQuestionOption.examQuestionId}`; %>
+                            <% const index = dataExamQuestion.examQuestionOption.indexOf(examQuestionOption); %>
+                            <!-- end show radio -->
+                    
+                            <!-- show check-box -->
+                            <% if (dataExamQuestion.answerType == 2) {%>
+                            <% type = 'checkbox'; %>
+                            <% name = `checkbox_${examQuestionOption.examQuestionId}`; %>
+                            <% } %>
+                            <!-- end show check-box -->
+                            <% if (examQuestionOption.rightAnswer === 1) {%>
+                                <exam-checked
+                                    type="<%=type%>"
+                                    value="<%=examQuestionOption.id%>"
+                                    text="<%= examQuestionOption.content %>"
+                                    id="ckbox-<%=examQuestionOption.id%>"
+                                    disabled="disabled"
+                                    checkedflag="checked"
+                                ></exam-checked>
+                            <% } %>
+                        <% } %>
+                    </div>
+                <% } %>
+            <% } %>
+            <!-- end show correct answer -->
+          <% } %>
+    </div>
+    <!-- end answer -->
+</div>

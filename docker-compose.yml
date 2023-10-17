@@ -1,0 +1,113 @@
+version: "3.8"
+
+# Docker Networks
+networks:
+    app-network:
+      driver: bridge
+
+services:
+    # Staging
+    app-staging:
+        container_name: app-staging
+        image: node:14.16.0
+        environment: 
+            - PORT=8080
+        command: 'bash -c "npm install && npm run staging"'
+        networks:
+            - app-network
+        working_dir: "/var/www/app"
+        volumes:
+            - "./:/var/www/app"
+    webserver-staging:
+        container_name: webserver-staging
+        image: nginx:1.19.10
+        volumes:
+            - ./config/nginx/default-staging.conf:/etc/nginx/conf.d/default.conf
+            - "./:/var/www/app"
+            # - ./ssl/letsencrypt:/etc/letsencrypt
+            # because staging and prod are built on one server, staging's ssl will refer to prod's ssl (path depends on folder structure)
+            - ./../../prod/web-nodejs/ssl/letsencrypt:/etc/letsencrypt
+        ports:
+            - "8081:80"
+            - "8082:8082"
+        networks:
+            - app-network
+    # Production
+    app-production:
+        container_name: app-production
+        image: node:14.16.0
+        environment: 
+            - PORT=8080
+        command: 'bash -c "npm install && npm run production"'
+        networks:
+            - app-network
+        working_dir: "/var/www/app"
+        volumes:
+            - "./:/var/www/app"
+    webserver-production:
+        container_name: webserver-production
+        image: nginx:1.19.10
+        volumes:
+            - ./config/nginx/default-production.conf:/etc/nginx/conf.d/default.conf
+            - "./:/var/www/app"
+            - ./ssl/letsencrypt:/etc/letsencrypt
+        ports:
+            - "80:80"
+            - "443:443"
+        networks:
+            - app-network
+    # Devserver
+    app-dev:
+        container_name: app-dev
+        image: node:14.16.0
+        environment: 
+            - PORT=8080
+        command: 'bash -c "npm install && npm run devserver"'
+        networks:
+            - app-network
+        working_dir: "/var/www/app"
+        volumes:
+            - "./:/var/www/app"
+    webserver-dev:
+        container_name: webserver-dev
+        image: nginx:1.19.10
+        volumes:
+            - ./config/nginx/default-devserver.conf:/etc/nginx/conf.d/default.conf
+            - "./:/var/www/app"
+            - ./ssl/letsencrypt:/etc/letsencrypt
+        ports:
+            - "80:80"
+            - "443:443"
+        networks:
+            - app-network
+    # Development(local)
+    app-start:
+        container_name: app-start
+        image: node:14.16.0
+        environment: 
+            - PORT=8080
+        command: 'bash -c "npm install && npm run start"'
+        networks:
+            - app-network
+        working_dir: "/var/www/app"
+        volumes:
+            - "./:/var/www/app"
+    webserver-start:
+        container_name: webserver-start
+        image: nginx:1.19.10
+        volumes:
+            - ./config/nginx/default-start.conf:/etc/nginx/conf.d/default.conf
+            - "./:/var/www/app"
+            - ./ssl/letsencrypt:/etc/letsencrypt
+        ports:
+            - "80:80"
+            - "443:443"
+        networks:
+            - app-network
+    # SSL
+    certbot:
+        image: certbot/certbot:v1.7.0
+        volumes:
+            - ./ssl/letsencrypt:/etc/letsencrypt
+            - "./:/var/www/app"
+        command: ["--version"]

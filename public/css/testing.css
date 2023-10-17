@@ -1,0 +1,71 @@
+.success-circle {
+  font-size: 33px;
+  color: green;
+  position: relative;
+}
+.success-check {
+  position: absolute;
+  right: 5px;
+  color: white;
+  font-size: 17px;
+  top: 7px;
+}
+.fail-circle {
+    font-size: 33px;
+  color: red;
+  position: relative;
+}
+.fail-check {
+  position: absolute;
+  color: white;
+  right: 9px;
+  font-size: 30px;
+}
+.fail-success {
+  padding-top:10px
+}
+.message-success {
+  position: absolute;
+  top: 14px;
+  padding-left: 9px;
+  color: rgb(18, 155, 63);
+}
+.icon-sending {
+  font-size: 24px;
+  opacity: 0.5;
+}
+.message-sending {
+  position: absolute;
+  top: 8px;
+  opacity: 0.5;
+  padding-left: 7px;
+}
+.message-network {
+  color: red;
+  position: absolute;
+  padding-left: 10px;
+  top: 0px;
+}
+
+.status-message-icon {
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+@media screen and (max-width: 1199px) {
+  .time-left {
+    width: 180px;
+    height: 75px;
+    border-radius: 10px;
+    background-color: white;
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 10px;
+    z-index: 10;
+  }
+
+  #title-testing {
+    margin-top: 96px;
+  }
+}

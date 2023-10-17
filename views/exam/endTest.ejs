@@ -1,0 +1,49 @@
+<div class="row" style="margin: auto">
+  <div class="col-12 col-sm-12 col-md-8 col-lg-7 col-xl-5 from-content">
+      <div class="from-header"></div>
+      <div class="col-12">
+        <h2 class="from-title word-break-text" style="margin-bottom: 20px">
+          <pre><%= result.exam.title %></pre>
+        </h2>
+
+        <pre><%= result.exam.endMessage !== null ? result.exam.endMessage : messageList.endMessage %></pre>
+        <% if (
+          result.exam.showResult === static.showResult.show ||
+          result.exam.showResult === static.showResult.showSubmittedWork ||
+          result.exam.showResult === static.showResult.showCorrectAnswer
+        ) { %>
+          <% if (result.totalScore !== null) {%>
+          <br/>
+          <div class="center">
+            <h3 style="font-weight: normal;">
+              Your score: 
+              <span style="color: #673ab7">
+                <span style="font-weight: bold;"><%= result.totalScore%></span> / <%=result.exam.totalPoints%> (<%= Math.floor(result.scorePercentage * 100) / 100 %>%)
+              </span>
+            </h3>
+          </div>
+          <% } %>
+          <% if (result.passExam !== null) {%>
+            <div class="div-center pass-exam">
+              <span><%= static.passExam[result.passExam] %>!</span>
+            </div>
+          <% } %>
+
+          <% if (
+            result.exam.showResult === static.showResult.showSubmittedWork ||
+            result.exam.showResult === static.showResult.showCorrectAnswer
+          ) { %>
+            <div class="center">
+              <a class="resultDetail" href="/resultDetail/<%= answerId %>/accessToken/<%= result.accessToken %>" target="_blank">View result detail</a>
+            </div>
+          <% } %>
+        <% } %>
+      </div>
+  </div>
+</div>
+
+<%- contentFor('pageTitle') %>
+<%= result.exam.title + " - EndTest - Exam Site" %>
+
+<%- contentFor('pageDescription') %>
+<%= result.exam.description %>

@@ -1,0 +1,48 @@
+{
+    "extends": ["tslint:recommended"],
+    "jsRules": {},
+    "rules": {
+      "arrow-parens": [true],
+      "arrow-return-shorthand": [true],
+      "await-promise": [true, "Bluebird"],
+      "completed-docs": false,
+      "curly": true,
+      "export-name": false,
+      "import-name": false,
+      "interface-over-type-literal": true,
+      "linebreak-style": false,
+      "newline-per-chained-call": false,
+      "no-angle-bracket-type-assertion": false,
+      "no-any": false,
+      "no-backbone-get-set-outside-model": false,
+      "no-console": [true, "debug", "info", "log", "trace", "warn"],
+      "no-default-export": false,
+      "no-empty-interface": false,
+      "no-internal-module": true,
+      "no-magic-numbers": false,
+      "no-misused-new": true,
+      "no-null-keyword": false,
+      "no-non-null-assertion": false,
+      "no-relative-imports": false,
+      "whitespace": false,
+      "trailing-comma": false,
+      "no-unnecessary-initializer": true,
+      "object-literal-sort-keys": false,
+      "no-unsafe-any": false,
+      "ordered-imports": true,
+      "prefer-function-over-method": false,
+      "prefer-method-signature": true,
+      "semicolon": false,
+      "strict-boolean-expressions": false,
+      "variable-name": false,
+      "quotemark": false,
+      "forceConsistentCasingInFileNames": false,
+      "typedef": [
+        true,
+        "parameter",
+        "property-declaration",
+        "member-variable-declaration"
+      ]
+    }
+  }
+  

@@ -1,0 +1,25 @@
+<form method="post" ref="form" @submit="checkForm" action="login/google">
+  <div class="row full-height">
+    <div class="div-center" style="width: 400px;">
+        <div class="mg-top-30">
+          <h2 class="center purple-text">Exam Site</div>
+          <div class="admin-login">
+            <h4 class="left purple-text">Login</h3>
+            <hr>
+            <button type="submit" class="loginBtn loginBtnAdmin--google loginAdminBtn">
+              Login with Google
+            </button>
+            <div class="red-text">
+              <% if (typeof message !== 'undefined') { %>
+                <%= message %>
+              <% } %>
+            </div>
+          </div>
+          <div class="col-12 mt-1 mb-4">Copyright © 2019 — Briswell Vietnam</div>
+        </div>
+    </div>
+  </div>
+</form>
+
+<%- contentFor('pageTitle') %>
+Login - Admin - Exam Site

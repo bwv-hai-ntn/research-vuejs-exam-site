@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="<%= typeof pageDescription !== 'undefined' ? truncate(pageDescription, 100) : '' %>">
+  <title><%= typeof pageTitle !== 'undefined' ? pageTitle : 'Exam Site' %></title>
+  <% if (typeof pageTitle !== 'undefined' && pageTitle.includes('StartTest')) { %>
+    <meta property="og:type" content="<%= typeof ogType !== 'undefined' ? ogType : '' %>">
+    <meta property="og:site_name" content="<%= typeof ogSiteName !== 'undefined' ? ogSiteName : '' %>">
+    <meta property="og:title" content="<%= typeof ogTitle !== 'undefined' ? ogTitle : '' %>">
+    <meta property="og:description" content="<%- typeof ogDescription !== 'undefined' ? ogDescription : '' %>">
+    <meta property="og:url" content="<%= typeof ogUrl !== 'undefined' ? ogUrl : '' %>">
+    <meta property="og:image" content="<%= typeof ogImage !== 'undefined' ? ogImage : '' %>">
+  <% } %>  
+  
+  <link rel="shortcut icon" href="/favicon.ico">
+  <!-- bootstrap -->
+  <link rel="stylesheet" href="/css/lib/bootstrap.min.css">
+  <!-- Custom style -->
+  <link rel="stylesheet" href="/css/styles.css">
+<% if (locals.nodeEnv == 'production') { %>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BQV8KME6SL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-BQV8KME6SL');
+  </script>
+<% } else { %>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GE1ZK0EJND"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-GE1ZK0EJND');
+  </script>
+<% } %>
+  
+  <%- typeof pageCSS !== 'undefined' ? pageCSS : '' %>
+
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+  <div class="loading">Loading&#8230;</div>
+  <div class="wrapper">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper vue-app">
+      <%- body %>
+    </div>
+    <!-- /.content-wrapper -->
+
+  <%- include('./scripts') %>
+  <%- script %>
+</body>
+
+</html>

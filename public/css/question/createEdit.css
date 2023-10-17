@@ -1,0 +1,258 @@
+.mg-bt-10 {
+  margin-bottom: 10px;
+}
+
+.mg-bt-20 {
+  margin-bottom: 20px;
+}
+
+.mg-l-40 {
+  margin-left: 40px;
+}
+
+.mg-r-10 {
+  margin-right: 10px;
+}
+
+.section-content {
+  padding: 10px 0;
+  min-height: 100vh;
+  background: #ede7f6;
+}
+.section-child {
+  padding: 10px 20px 0 20px;
+  margin-bottom: 10px;
+  border-radius: 0 0 10px 10px;
+  background-color: white;
+}
+
+.section-no {
+  height: 35px;
+  background: #7248B9;
+  width: 150px;
+  color: white;
+  padding-top: 5px;
+  border-radius: 10px 10px 0 0;
+  text-align: center;
+}
+textarea, select, input {
+  background: #f6f7f9 !important;
+  resize: none;
+}
+.textarea-section-title {
+  height: 50px;
+  font-size: 25px;
+  padding: 5px;
+}
+textarea:focus {
+  background: #f6f7f9;
+}
+.textarea-section-normal {
+  height: 35px;
+  padding: 5px;
+}
+
+.form-textarea {
+  padding-bottom: 10px;
+}
+
+.form-question {
+  width: 94%;
+  margin-left: 2%;
+}
+
+.clear-border-radius {
+  border-top-left-radius: unset;
+}
+
+.question-border {
+  border-radius: 10px;
+}
+
+.fix-on-row {
+  padding: 0px 10px 0px 0px;
+  float: left;
+}
+
+.question-more-option {
+  height: 33px;
+  width: 33px;
+  float: right;
+  border-radius: 33px;
+  border: 0px;
+  background: white;
+  outline: none !important;
+}
+
+.question-more-option:focus {
+  background-color: #f6f7f9;
+}
+
+.bi-grid-3x2-gap-fill {
+  width: 1em;
+  height: 1em;
+  margin-top: -20px;
+  cursor: move;
+}
+
+.bi-plus {
+  width: 50px;
+  height: 50px;
+  background-color: #f6f7f9;
+  border-radius: 4em;
+  cursor: pointer;
+}
+
+.move-vertical {
+  padding: 0;
+  padding-top: 2px;
+  margin-left: -7px;
+  cursor: move;
+}
+
+.radio-options {
+  margin-top: 8px;
+  margin-right: 8px;
+}
+
+.remove-option {
+  width: 25px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.dupplication-icon {
+  margin-top: 3px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+.menu-more-option {
+  position: absolute;
+  right: 8%;
+  z-index: 200;
+}
+.menu-more-option > div {
+  background: white;
+  padding: 8px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.menu-more-option > div:hover {
+  background-color: #f6f7f9;
+}
+
+.menu-mg-right-40 {
+  margin-right: -40px !important;
+}
+
+.bi-image {
+  height: 20px;
+  margin-bottom: 3px;
+  margin-left: 3px;
+}
+
+.img-del {
+  margin-bottom: 3px;
+  position: absolute;
+  right: 0;
+  margin-top: 10px;
+  margin-right: 12%;
+  z-index: 1;
+  background: #f6f7f9;
+  padding: 7px 10px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.exam-img {
+  width: 81%;
+  margin: auto;
+  margin-bottom: 10px;
+}
+
+.exam-img img {
+  max-width: 99.9%;
+  /* height: -webkit-fill-available; */
+}
+
+.audio-del {
+  position: absolute;
+  right: 4%;
+  margin-top: -45px;
+  cursor: pointer;
+}
+
+audio {
+  margin-top: 0;
+}
+
+.no-decoration:hover {
+  text-decoration: none;
+}
+
+.h-37 {
+  height: 37px !important;
+}
+
+.from-header {
+  background-color: #7248B9;
+}
+
+.btn-custom {
+  font-weight: 600;
+  min-width: 100px;
+}
+
+.btn-next {
+  background-color: white !important;
+  border-color: white !important;
+}
+
+.mg-bt-10 {
+      margin-bottom: 10px;
+}
+
+.btn-light {
+  font-size: inherit !important;
+}
+
+.processing-failed {
+  color: red;
+  padding-bottom: 10px;
+}
+
+.dis-border {
+  border-bottom: none
+}
+
+.header-custom-popup, .header-custom-popup-choice  {
+  color: red;
+  word-break: break-all;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-bottom: 1px solid #dee2e6;
+  border-top-left-radius: calc(.3rem - 1px);
+  border-top-right-radius: calc(.3rem - 1px);
+}
+
+.div-title-popup-choice {
+  font-weight: bold;
+  color: black !important;
+}
+

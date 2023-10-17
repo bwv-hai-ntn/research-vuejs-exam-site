@@ -1,0 +1,40 @@
+<div id="recommendationList">
+  <recommendation-list :recommendations="recommendations"></recommendation-list>
+</div>
+
+<div class="ad-container">
+  <div class="ad">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2337506119017612"
+     crossorigin="anonymous"></script>
+    <!-- TopBetweenArticle -->
+    <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-2337506119017612"
+     data-ad-slot="3726251079"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+    <script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+</div>
+
+<div id="pickupList">
+  <pickup-list :pickups="pickups" :messagelist="messagelist"></pickup-list>
+</div>
+
+<input hidden name="messageList" value="<%= JSON.stringify(messageList) %>">
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/js/top.js"></script>
+<script src="/js/lib/moment.min.js"></script>
+
+<%- contentFor('pageDescription') %>
+Achieve IT and language certification success. Enhance skills and career prospects with us today!
+
+<%- contentFor('ogType') %>website
+<%- contentFor('ogSiteName') %>EXAM site
+<%- contentFor('ogTitle') %>Comprehensive Exam Resource for IT, AWS, Testing, and Language Studies
+<%- contentFor('ogDescription') %>Empower your learning journey with our comprehensive exam resources. Whether you're studying IT, AWS, Software Testing, or enhancing your English and Japanese skills, we provide practice exams to help you check your progress and succeed.
+<%- contentFor('ogUrl') %><%= locals.domain + '/' %>
+<%- contentFor('ogImage') %><%= locals.domain + '/img/top-image.png' %>

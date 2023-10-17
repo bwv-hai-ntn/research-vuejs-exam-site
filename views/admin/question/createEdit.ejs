@@ -1,0 +1,394 @@
+<link rel="stylesheet" href="/css/question/createEdit.css">
+
+<%- include('../common/tabs.ejs', {curentTab: 'questions', id: exam.id}) %>
+<div class="clearfix"></div>
+<div class="section-content" style="opacity: 0">
+  <!-- buttons  -->
+  <button-list :sections="sections" :current_section="current_section" :section_count="section_count"></button-list>
+  <!-- buttons  -->
+
+  <div class="col col-12">
+    <div v-for="(section, section_index) in sections">
+      <div class="col-8 section-no">Section {{ current_section + 1 }} of {{ section_count }}</div>
+      <div class="col-8 from-header clear-border-radius"></div>
+      <div class="col-8 section-child">
+        <% let testTimeFlag = 'fasle'; let colDiv = 'col-12'; %> 
+        <% if (exam.testTimeSetting === static.testTimeSetting['Set based on section']) { %>
+          <% testTimeFlag = 'true'; colDiv = 'col-9' %> 
+        <% } %>
+        <div class="<%= colDiv %>  fix-on-row">
+          <section-textarea
+          column="title"
+          table="examSection"
+          labelname="Section title"
+          :error="$v.sections.$each[section_index].title"
+          v-model="$v.sections.$each[section_index].title.$model"
+          customclass="textarea-section-title"
+          placeholder="Section title (optional)"></section-textarea>
+        </div>
+        <% if (testTimeFlag === 'true') { %>
+          <div class="col-2 fix-on-row" style="padding-top: 12px;">
+            <section-input
+              column="testTime"
+              table="examSection"
+              labelname="Test time"
+              :error="$v.sections.$each[section_index].testTime"
+              v-model="$v.sections.$each[section_index].testTime.$model"
+              type="number"
+              customclass="textarea-section-normal"
+              placeholder=""></section-input>
+          </div>
+          <div class="col-1 fix-on-row" style="padding-top: 20px"> minutes</div>
+        <% } %>
+        <div class="clearfix"></div>
+        <section-textarea
+          column="description"
+          table="examSection"
+          labelname="Section description"
+          :error="$v.sections.$each[section_index].description"
+          customclass="textarea-section-normal"
+          v-model="$v.sections.$each[section_index].description.$model"
+          placeholder="Section description (optional)"></section-textarea>
+          <div class="processing-failed" processing-failed="section"></div>
+      </div>
+
+      <!-- question -->
+      <div class="question-sortable">
+      <div
+        v-if="section.questions && section.questions.length"
+          v-for="(question, question_index) in section.questions" v-bind:key="question.id"
+            :question_id="question.id"
+        >
+
+        <div class="col-8 section-child question-border float-left">
+          <move-question customclass="question-sort"></move-question>
+          <div class="clearfix"></div>
+          <div class="col-8 fix-on-row">
+            <section-textarea
+              column="content"
+              table="examQuestion"
+              :question="question"
+              labelname="Question content"
+              :error="$v.sections.$each[section_index].questions.$each[question_index].content"
+              v-model="$v.sections.$each[section_index].questions.$each[question_index].content.$model"
+              customclass="textarea-section-normal"
+              placeholder="Question content (optional)"></section-textarea>
+          </div>
+
+          <div class="col-3 fix-on-row">
+            <!-- answerType -->
+            <section-select
+              :value="question.answerType"
+              :question="question"
+              v-model="$v.sections.$each[section_index].questions.$each[question_index].answerType.$model"
+              :options="select_options">
+            </section-select>
+            <!-- End answerType -->
+          </div>
+          <div class="col-1 fix-on-row">
+            <question-more-option :higher="true" :question_id="question.id"></question-more-option>
+          </div>
+          <div class="clearfix"></div>
+          <div class="col-11 fix-on-row" v-if="question.answerType != 0">
+            <section-textarea
+              column="explanation"
+              table="examQuestion"
+              :question="question"
+              :error="$v.sections.$each[section_index].questions.$each[question_index].explanation"
+              v-model="$v.sections.$each[section_index].questions.$each[question_index].explanation.$model"
+              customclass="textarea-section-normal"
+              placeholder="Explanation (optional)" />
+          </div>
+          <div class="clearfix"></div>
+          <!-- Picture & Audio -->
+          <image-audio :question="question" :section_index="section_index" :question_index="question_index"></image-audio>
+          <!-- answer by text -->
+          <div v-if="question.answerType == 3">
+            <div class="col-9 fix-on-row">
+              <section-input
+                column="rightAnswerByText"
+                :question="question"
+                table="examQuestion"
+                labelname="Right answer by text"
+                :error="$v.sections.$each[section_index].questions.$each[question_index].rightAnswerByText"
+                type="text"
+                v-model="$v.sections.$each[section_index].questions.$each[question_index].rightAnswerByText.$model"
+                customclass="textarea-section-normal"
+                placeholder="Correct answer (required if points is filled)"></section-input>
+            </div>
+            <div class="col-2 fix-on-row">
+              <section-input
+                column="points"
+                :question="question"
+                table="examQuestion"
+                labelname="Points"
+                :error="$v.sections.$each[section_index].questions.$each[question_index].points"
+                :parent_model="$v.sections.$each[section_index].questions.$each[question_index]"
+                type="number"
+                v-model="$v.sections.$each[section_index].questions.$each[question_index].points.$model"
+                customclass="textarea-section-normal"
+                placeholder=""></section-input>
+            </div>
+            <div class="col-1 fix-on-row" style="padding-top: 5px"> points</div>
+
+            <div class="clearfix"></div>
+          </div>
+          <!-- End answer by text -->
+          <div class="clearfix"></div>
+          <!-- End Picture & Audio -->
+
+          <!-- No Answer -->
+          <div v-if="question.answerType == 0">
+            <div class="col-12 fix-on-row" style="padding: 0">
+              <add-question
+                :level="1"
+                :section_index="section_index"
+                :question_index="question_index"
+                id="btn-add-question-to-question"
+                text="Add question to this question">
+              </add-question>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+          <!-- End No Answer -->
+          
+          <!-- radio or checkbox -->
+          <div class="col-12 fix-on-row" style="padding: 0"
+            v-if="question.answerType == 1 || question.answerType == 2"
+          >
+            <multiple-choice 
+              :v_model="$v.sections.$each[section_index].questions.$each[question_index]"
+              :type="question.answerType == 1 ? 'radio' : 'checkbox'"
+              id="btn-remove-option"
+              :question="question"
+              :section_index="section_index"
+              :question_index="question_index"
+              :question_options="question.questionOptions ? question.questionOptions : []">
+            </multiple-choice>
+
+            <!-- Add Option -->
+            <div class="col-12 fix-on-row" style="padding: 0">
+              <add-question
+                :not_mg_bt="true"
+                :section_index="section_index"
+                :question_index="question_index"
+                id="btn-add-option"
+                text="Add option">
+              </add-question>
+            </div>
+            <div class="clearfix"></div>
+            <!-- End add option -->
+          </div>
+          <!-- end radio or checkbox -->
+          <div class="col-12 fix-on-row">&nbsp;</div>
+          <div class="clearfix"></div>
+          <div class="processing-failed" :processing-failed="question.id"></div>
+        </div>
+        <menu-more-option :question_index="question_index" :higher="true" :section_index="section_index" :question="question" :question_parent="true"></menu-more-option>
+        <div class="clearfix"></div>
+
+        <!-- question child -->
+        <div class="question-child-sortable">
+        <div
+          v-if="question.answerType == 0 && question.questions && question.questions.length"
+            v-for="(questionChild, question_child_index) in question.questions" v-bind:key="questionChild.id"
+              :question_child_id="questionChild.id"
+          >
+
+            <div class="col-8 section-child question-border mg-l-40 float-left">
+              <move-question customclass="question-child-sort"></move-question>
+              <div class="clearfix"></div>
+              <div class="col-8 fix-on-row">
+                <section-textarea
+                  column="content"
+                  :question="questionChild"
+                  table="examQuestion"
+                  labelname="Question content"
+                  :error="$v.sections.$each[section_index].questions.$each[question_index].questions.$each[question_child_index].content"
+                  v-model="$v.sections.$each[section_index].questions.$each[question_index].questions.$each[question_child_index].content.$model"
+                  customclass="textarea-section-normal"
+                  placeholder="Question content (optional)"></section-textarea>
+              </div>
+              <div class="col-3 fix-on-row">
+                <!-- answerType -->
+                <section-select
+                  :value="questionChild.answerType"
+                  :question="questionChild"
+                  :not_show_no_anwser="true"
+                  v-model="$v.sections.$each[section_index].questions.$each[question_index].questions.$each[question_child_index].answerType.$model"
+                  :options="select_options">
+                </section-select>
+                <!-- End answerType -->
+              </div>
+              <div class="col-1 fix-on-row">
+                <question-more-option :question_id="questionChild.id"></question-more-option>
+              </div>
+              <div class="clearfix"></div>
+              <div class="col-11 fix-on-row" v-if="questionChild.answerType != 0">
+                <section-textarea
+                  column="explanation"
+                  table="examQuestion"
+                  :question="questionChild"
+                  :error="$v.sections.$each[section_index].questions.$each[question_index].questions.$each[question_child_index].explanation"
+                  v-model="$v.sections.$each[section_index].questions.$each[question_index].questions.$each[question_child_index].explanation.$model"
+                  customclass="textarea-section-normal"
+                  placeholder="Explanation (optional)" />
+              </div>
+              <div class="clearfix"></div>
+              <!-- Picture & Audio -->
+              <image-audio :question="questionChild" :section_index="section_index" :question_index="question_index"
+                :question_child_index="question_child_index">
+              </image-audio>
+              <!-- answer by text -->
+              <div v-if="questionChild.answerType == 3">
+                <div class="col-9 fix-on-row">
+                  <section-input
+                    column="rightAnswerByText"
+                    :question="questionChild"
+                    table="examQuestion"
+                    labelname="Right answer by text"
+                    :error="$v.sections.$each[section_index].questions.$each[question_index].questions.$each[question_child_index].rightAnswerByText"
+                    type="text"
+                    v-model="$v.sections.$each[section_index].questions.$each[question_index].questions.$each[question_child_index].rightAnswerByText.$model"
+                    customclass="textarea-section-normal"
+                    placeholder="Correct answer (required if points is filled)"></section-input>
+                </div>
+                <div class="col-2 fix-on-row">
+                  <section-input
+                    column="points"
+                    :question="questionChild"
+                    table="examQuestion"
+                    labelname="Points"
+                    :error="$v.sections.$each[section_index].questions.$each[question_index].questions.$each[question_child_index].points"
+                    :parent_model="$v.sections.$each[section_index].questions.$each[question_index].questions.$each[question_child_index]"
+                    type="number"
+                    v-model="$v.sections.$each[section_index].questions.$each[question_index].questions.$each[question_child_index].points.$model"
+                    customclass="textarea-section-normal"
+                    placeholder=""></section-input>
+                </div>
+                <div class="col-1 fix-on-row" style="padding-top: 5px"> points</div>
+                <div class="clearfix"></div>
+              </div>
+              <!-- End answer by text -->
+              <div class="clearfix"></div>
+              <!-- End Picture & Audio -->
+
+              <!-- radio or checkbox -->
+              <div class="col-12 fix-on-row" style="padding: 0"
+                v-if="questionChild.answerType == 1 || questionChild.answerType == 2"
+              >
+                <multiple-choice 
+                  :v_model="$v.sections.$each[section_index].questions.$each[question_index].questions.$each[question_child_index]"
+                  :type="questionChild.answerType == 1 ? 'radio' : 'checkbox'"
+                  :section_index="section_index"
+                  :question="questionChild"
+                  :question_index="question_index"
+                  :question_child_index="question_child_index"
+                  :question_options="questionChild.questionOptions ? questionChild.questionOptions : []">
+                </multiple-choice>
+
+                <!-- Add Option -->
+                <div class="col-12 fix-on-row" style="padding: 0">
+                  <add-question
+                    :not_mg_bt="true"
+                    :section_index="section_index"
+                    :question_index="question_index"
+                    :question_child_index="question_child_index"
+                    :level="2"
+                    id="btn-add-option"
+                    text="Add option">
+                  </add-question>
+                </div>
+                <div class="clearfix"></div>
+                <!-- End add option -->
+              </div>
+              <!-- end radio or checkbox -->
+              <div class="col-12 fix-on-row">&nbsp;</div>
+              <div class="clearfix"></div>
+              <div class="processing-failed" :processing-failed="questionChild.id"></div>
+            </div>
+            <menu-more-option
+              :section_index="section_index"
+              :question="questionChild"
+              :question_index="question_index" 
+              customclass="menu-mg-right-40"></menu-more-option>
+            <div class="clearfix"></div>
+        </div>
+        </div>
+        <!-- End question child -->
+      </div>
+      </div>
+      <!-- end question -->
+
+      <div class="col-8">
+        <add-question
+          :section_index="section_index"
+          id="btn-add-question"
+          text="Add question to this section">
+        </add-question>
+        <div class="processing-failed" processing-failed="add-question-parent"></div>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+</div>
+
+<!-- continueEditConfirm popup -->
+<%- include('../../exam/continueEditConfirmPopup.ejs') %>
+<%- include('./popup_sectionList.ejs') %>
+<%- include('./popup_sectionChoice.ejs') %>
+
+<input type="file" id="image" class="hide" accept=".jpg, .jpeg, .png">
+<input type="file" id="audio" class="hide" accept=".mp3">
+<input type="hidden" data-value="<%= JSON.stringify(exam)%>" disabled name="examData">
+<input type="hidden" data-value="<%= JSON.stringify(anwser)%>" disabled name="anwserData">
+<input type="hidden" data-value="<%= JSON.stringify(examSections)%>" disabled name="examSectionsData">
+<input type="hidden" data-value="<%= JSON.stringify(sectionPage)%>" disabled name="sectionPage">
+
+<%- contentFor('pageTitleHeader') %>
+<%= exam.title %>
+<%- contentFor('userImage') %>
+<%= adminInfo.userImage %> 
+<%- contentFor('userName') %>
+<%= adminInfo.userName %> 
+<%- contentFor('userAuthor') %>
+<%= adminInfo.userAuthor %> 
+<%- contentFor('displayId') %>
+exams_list
+<%- contentFor('copyBtn') %>
+<exam-button-icon
+  type="button"
+  id="copy_btn"
+  iconcopy="true"
+  customclass="btn-header"
+>
+</exam-button-icon>
+<%- contentFor('deleteBtn') %>
+<exam-button-icon
+  v-if="<%=(exam && exam.deletedAt === null)%>"
+  type="button"
+  id="delete_btn"
+  icondelete="true"
+  customclass="btn-header"
+>
+</exam-button-icon>
+<%- contentFor('revertBtn') %>
+<exam-button-icon
+  v-if="<%=(exam && exam.deletedAt !== null)%>"
+  type="button"
+  id="revert_btn"
+  iconrevert="true"
+  customclass="btn-header"
+>
+</exam-button-icon>
+<%- contentFor('permissionSideBar') %>
+  <%= adminInfo.userAuthor !=='ADMIN' ? 'hidden-side' : '' %>
+<script>
+  const answerType = "<%= JSON.stringify(static.answerType) %>";
+  const select_options = JSON.parse(answerType.replace(/&#34;/g, '"'))
+</script>
+<script src="/js/lib/jquery-ui.js"></script>
+<script src="/js/lib/lodash.min.js"></script>
+<script src="/js/components/sectionsTree.js"></script>
+<script src="/js/admin/question/createEdit.js"></script>

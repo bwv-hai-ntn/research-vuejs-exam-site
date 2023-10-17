@@ -1,0 +1,36 @@
+<link rel="stylesheet" href="/css/exam/examList.css">
+<section class="content">
+    <div class="col-8 pd-0">
+        <form method="get" ref="form" class="form-category" novalidate>
+                <!-- Category -->
+                <exam-input
+                labelname="Category name"
+                name="category"
+                v-model="$v.admin.category.$model"
+                ></exam-input>
+        </form>
+    </div>
+    <div class="row row-search">
+        <div class="col-md-12 col-sm-12 col-xs-12 pd-0">
+            <div class="table-responsive no-padding">
+                <category-table
+                    :data="<%= JSON.stringify(categoryList) %>"
+                    permission="<%= adminInfo.userAuthor %>">
+                </category-table>
+            </div>
+        </div>
+    </div>
+</section>
+<%- contentFor('pageTitleHeader') %>
+Category List
+<%- contentFor('userImage') %>
+<%= headerData.userImage %> 
+<%- contentFor('userName') %>
+<%= headerData.userName %> 
+<%- contentFor('userAuthor') %>
+<%= headerData.userAuthor %> 
+<%- contentFor('displayId') %>
+categorys_list
+<%- contentFor('permissionSideBar') %>
+<%= adminInfo.userAuthor !== 'ADMIN' ? 'hidden-side' : '' %>
+<script src="/js/admin/category/categoryList.js"></script>

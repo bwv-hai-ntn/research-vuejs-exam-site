@@ -1,0 +1,79 @@
+<link rel="stylesheet" href="/css/exam/examList.css">
+<section class="content">
+    <div class="row">
+        <div class="col-md-12 mg-pd-0">
+            <input type="hidden" value="<%= JSON.stringify(queryData) %>" disabled name="queryData">
+            <form method="get" ref="form" @submit="searchForm" novalidate>
+                <div class="row">
+                    <div class="col-md-6 mg-pd-0 exam-title">
+                        <!-- Exam title -->
+                        <exam-input
+                        labelname="Exam title"
+                        name="title"
+                        v-model="$v.admin.title.$model"
+                        ></exam-input>
+                    </div>
+                    <div class="col-md-6 mg-pd-0">
+                        <!-- Access key -->
+                        <exam-input
+                        labelname="Exam description"
+                        name="description"
+                        v-model="$v.admin.description.$model"
+                        ></exam-input>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mg-pd-0">
+                        <!-- Access key -->
+                        <exam-input
+                        labelname="Access key"
+                        name="accessKey"
+                        v-model="$v.admin.accessKey.$model"
+                        ></exam-input>
+                    </div>
+                    <div class="col-md-4 pd-0 mg-t-10 custom-col">
+                        <input type="hidden" name="status" value="">
+                        <exam-checkbox labelname="Status" name="status" v-model="$v.admin.cbxStatus.$model"
+                            :value="<%= JSON.stringify(queryData.status) %>" :options="<%= JSON.stringify(static.examListCheckBox) %>"
+                            @statuschanged="onStatusChange">
+                        </exam-checkbox>
+                    </div>
+                    <div class="col-md-4 mg-pd-0 category">
+                        <exam-select-box
+                        name="category"
+                        labelname="Exam category"
+                        v-model="$v.admin.category.$model"
+                        :options="<%= JSON.stringify(categories) %>"
+                        ></exam-select-box>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>  
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12 mg-pd-0">
+            <div class="table-responsive no-padding">
+                <exam-table
+                    :static="<%= JSON.stringify(static) %>"
+                    :data="<%= JSON.stringify(exams) %>"
+                    :count="<%= JSON.stringify(totalResult) %>"
+                    :option="<%= JSON.stringify(categories) %>"
+                    permission="<%= adminInfo.userAuthor %>">
+                </exam-table>
+            </div>
+        </div>
+    </div>
+</section>
+<%- contentFor('pageTitleHeader') %>
+Exam List
+<%- contentFor('userImage') %>
+<%= adminInfo.userImage %> 
+<%- contentFor('userName') %>
+<%= adminInfo.userName %> 
+<%- contentFor('userAuthor') %>
+<%= adminInfo.userAuthor %> 
+<%- contentFor('displayId') %>
+exams_list
+<%- contentFor('permissionSideBar') %>
+<%= adminInfo.userAuthor !== 'ADMIN' ? 'hidden-side' : '' %>
+<script src="/js/admin/exam/examList.js"></script>

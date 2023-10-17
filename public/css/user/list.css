@@ -1,0 +1,162 @@
+.user .col-12.row .col-10 {
+    max-width: 100% !important;
+    flex: auto !important;
+    padding: 0px;
+}
+
+.user .col-12.row .col-2 {
+    display: none;
+}
+
+.mg-pd-0 {
+    margin: 0px !important;
+    padding: 0px !important;
+}
+
+section.content {
+    padding: 0px !important;
+}
+
+.total-result {
+    padding-left: 13px;
+}
+
+.navbar {
+    border-bottom: 1px solid #ddd9d9 !important;
+}
+
+.category-select select {
+  width: auto !important;
+  max-width: 100% !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.pd-10 .col-12.row {
+  margin-top: 10px;
+}
+
+.svg-add {
+    width: 50px;
+    border-radius: 50%;
+    background: gainsboro;
+}
+.svg-add:hover {
+    cursor: pointer;
+}
+.cover-svg-add {
+    display: block;
+    margin-right: 100px;
+    margin-top:5px;
+    margin-bottom:5px
+}
+
+#table-wrapper {
+  position:relative;
+}
+
+#table-scroll {
+  overflow:auto;
+}
+
+#table-wrapper table {
+  width:100%;
+}
+
+#table-wrapper table thead {
+  display: table-header-group;
+}
+
+#table-wrapper table thead {
+  color:rgb(103, 58, 183);
+}
+
+#table-wrapper table thead {
+  position:absolute !important;   
+  top:-31px !important;
+  z-index:2 !important;
+  height: 10px !important;
+}
+
+#table-wrapper table td, #table-wrapper table th {
+  padding: 0.5rem;
+}
+
+.hr-bottom {
+  padding: 0px;
+  margin: 0px;
+}
+
+.hr-top {
+  padding: 0px;
+  margin: 0px;
+  top: -39px;
+  width: 100%;
+  position: absolute;
+}
+
+#table-wrapper table thead {
+  display: table-footer-group;
+}
+
+.tableFixHead { 
+    overflow-y: auto;
+    border-top: 1px solid #ced4da 
+}
+
+.tableFixHead thead th { 
+    position: sticky; 
+    top: 0px;
+    z-index: 999;
+}
+
+.tableFixHead table { 
+    border-collapse: collapse; 
+    width: 100%; 
+    border-top: hidden; 
+}
+
+.tableFixHead th { 
+    background:white; 
+}
+
+.bottom-header {
+  padding: 0px;
+  top: 92px;
+  height: 10px;
+  margin: 0px;
+  position: absolute;
+  background-color: white;
+  border-top: none !important;
+  border-bottom: 1px solid rgba(0,0,0,.1);
+}
+
+.pd-5 {
+  padding-left: 5px;
+}
+
+.mg-5 {
+  margin-left: 5px;
+}
+
+.div-svg-plus {
+  display: block; 
+  margin-right: 100px; 
+  margin-top:5px; 
+  margin-bottom:5px
+}
+
+.div-bi-plus {
+  display: flex;
+  margin-right: 20px;
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+
+.text-add {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 5px;
+    padding-left: 5px;
+}

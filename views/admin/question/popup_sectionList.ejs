@@ -1,0 +1,74 @@
+<div class="modal fade" id="sectionList" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="sectionListLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header dis-border">
+        <div style="float: left;">Section list
+          <button class="btn btn-success mg-r-10" style="margin-left: 200px;" onClick="popup_addSection()">
+            <svg width="20" height="20" fill="currentColor" class="bi" viewBox="0 0 14 14" style="margin-bottom: 4px;">
+              <path fill-rule="evenodd"
+                d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+            </svg>
+            Add section
+          </button>
+        </div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="header-custom-popup"></div>
+      <div class="modal-body section-sortable" style="text-align: center;">
+        <label class="col-12 word-break-text row"
+          v-for="(section, section_key) in sectionList"
+        >
+          <div class="col-1" style="text-align: left; padding: 10px 0">
+            <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="currentColor" class="bi bi-grip-vertical ui-sortable-handle" style="cursor: move;">
+              <path d="M7 2a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM7 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM7 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-3 3a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-3 3a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"></path>
+            </svg>
+          </div>
+          <div class="col-10" style="text-align: left; padding: 0">
+            
+            <a class="no-decoration" :href="'?sectionPage='+ section_key">
+              <exam-div
+                customclass="div-title"
+                :title="section.title || '(Untitled Section)'"
+              ></exam-div>
+            </a>
+            <div style="opacity: 0.5; display: inline;">
+              Section {{ section_key + 1}} of {{ sectionList.length }}
+            </div>
+            <div style="opacity: 0.5; float: right; display: inline;" v-if="testTimeSettingData && testTimeSettingData === 2 && section.testTime">
+              Test time: {{ section.testTime }} minutes
+            </div>
+          </div>
+          <div class="col-1" style="text-align: right; padding: 10px 0">
+            <svg style="cursor: pointer;" width="23" height="23" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16"
+              :sectionid= "section.id"
+              v-on:click="popup_deleteSection(section_key, section.id)"
+            >
+              <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"></path>
+              <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"></path>
+            </svg>
+          </div>
+          <hr style="width: 100%;" v-if="section_key + 1 !== sectionList.length">
+          <hr style="width: 100%;" v-if="(section_key + 1 == sectionList.length) && testTimeSettingData && (testTimeSettingData === 1 || testTimeSettingData === 2)">
+        </label>
+        <div class="col-12 row" v-if="testTimeSettingData && (testTimeSettingData === 1 || testTimeSettingData === 2)">
+          <div class="col-1" style="text-align: left; padding: 10px 0"></div>
+          <div class="col-5" style="text-align: left; padding: 0">
+            <exam-div
+              customclass="div-title"
+              title="Total test time"
+            ></exam-div>
+          </div>
+          <div class="col-3" style="opacity: 1; text-align: left;" v-if="testTimeSettingData && testTimeSettingData === 1 && testTime">
+             {{ testTime }} minutes
+          </div>
+          <div class="col-3" style="opacity: 1; text-align: left;" 
+            v-if="testTimeSettingData && testTimeSettingData === 2 && totalTestTotalSection">
+            {{ totalTestTotalSection}} minutes
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
