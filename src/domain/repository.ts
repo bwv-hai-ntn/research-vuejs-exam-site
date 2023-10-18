@@ -13,6 +13,7 @@ import InformationRepository from './repo/InformationRepo';
 import PickupRepository from './repo/PickupRepo';
 import RecommendationRepository from './repo/RecommedationRepo';
 import UserRepository from './repo/UserRepo';
+import ProductsRepository from './repo/ProductsRepo';
 // tslint:disable max-classes-per-file
 /**
  * Exam
@@ -73,3 +74,8 @@ export class Information extends InformationRepository {}
  * Recommendation
  */
 export class Recommendation extends RecommendationRepository {}
+
+/**
+ * Products
+ */
+export class Products extends ProductsRepository {}

@@ -19,6 +19,9 @@ import pickup, { Pickup } from './PickupModel';
 import recommendation, { Recommendation } from './RecommendationModel';
 import userCategory, { UserCategory } from './UserCategoryModel';
 import user, { User } from './UserModel';
+import products, { Products } from './ProductsModel';
+import orders, { Orders } from './OrdersModel';
+import orderDetail, { OrderDetail } from './OrderDetailModel';
 
 export type DB = ReturnType<typeof initialize>;
 
@@ -40,7 +43,10 @@ export const initialize = (sqlize: Sequelize.Sequelize) => {
     Pickup: sqlize.import(Pickup.name, pickup),
     PickupDetail: sqlize.import(PickupDetail.name, pickupDetail),
     Information: sqlize.import(Information.name, information),
-    Recommendation: sqlize.import(Recommendation.name, recommendation)
+    Recommendation: sqlize.import(Recommendation.name, recommendation),
+    Products: sqlize.import(Products.name, products),
+    Orders: sqlize.import(Orders.name, orders),
+    OrderDetail: sqlize.import(OrderDetail.name, orderDetail)
   };
 
   // initialize all association of all model

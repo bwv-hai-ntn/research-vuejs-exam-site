@@ -11,6 +11,8 @@ import * as session from 'express-session';
 import './LoadEnv';
 import './sequelize';
 
+import 'reflect-metadata';
+
 import errorHandler from './middlewares/errorHandler';
 import router from './router';
 

@@ -5,6 +5,7 @@ import * as informationFactory from './factory/informationFactory';
 import * as pickupFactory from './factory/pickupFactory';
 import * as recommendationFactory from './factory/recommendationFactory';
 import * as userFactory from './factory/userFactory';
+import * as productsFactory from './factory/productsFactory';
 
 // tslint:disable-next-line: no-namespace
 export namespace auth {
@@ -43,4 +44,9 @@ export namespace information {
 // tslint:disable-next-line: no-namespace
 export namespace recommendation {
   export import searchListRecommendation = recommendationFactory.ISearchListRecommendation;
+}
+
+// tslint:disable-next-line: no-namespace
+export namespace products {
+  export import searchListProducts = productsFactory.ISearchListProducts;
 }

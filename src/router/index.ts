@@ -23,8 +23,11 @@ import viewHelper from '../middlewares/viewHelper';
 import informationRouter from './InformationRouter';
 import pickupRouter from './PickupRouter';
 import recommendationRouter from './RecommendationRouter';
+import searchRouter from './SearchRouter';
 
 const router = Router();
+
+router.use('/search', searchRouter);
 
 router.use('/', pickupRouter);
 router.use('/', informationRouter);
