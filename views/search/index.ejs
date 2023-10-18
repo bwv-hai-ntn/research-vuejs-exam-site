@@ -1,0 +1,63 @@
+<link rel="stylesheet" href="/css/exam/examList.css">
+
+<section class="content mx-5 my-5">
+    <form method="get" ref="form" @submit="searchForm"></form>
+        <div class="row">
+            <div class="col-md-12 mg-pd-0">
+                <div class="row">
+                    <div class="col-md-6 mg-pd-0">
+                        <!-- Product name -->
+                        <product-input
+                        labelname="Product name"
+                        name="productName"
+                        v-model="productName"
+                        ></product-input>
+                    </div>
+                    <div class="col-md-6 mg-pd-0">
+                        <!-- Feature flag -->
+                        <product-checkbox labelname="Featured flag" name="featuredFlg" v-model="featuredFlg"
+                            :options="{ 0: 'No', 1: 'Yes' }"
+                            @statuschanged="onStatusChange">
+                        </product-checkbox>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mg-pd-0">
+                        <!-- Price from to -->
+                        <input-from-to
+                            labelname="Price"
+                            name="price"
+                            :valuefrom = "priceFrom"
+                            :valueto = "priceTo"
+                            @input-from = "priceFrom = $event"
+                            @input-to = "priceTo = $event"
+                        ></input-from-to>
+                    </div>
+                    <div class="col-md-6 pd-0">
+                        <date-from-to
+                            labelname="Created date"
+                            name="createdDate"
+                            :valuefrom = "createdDateFrom"
+                            :valueto = "createdDateTo"
+                            @input-from = "createdDateFrom = $event"
+                            @input-to = "createdDateTo = $event"
+                        ></date-from-to>
+                    </div>
+                </div>
+            </div>
+        </div>  
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12 mg-pd-0">
+                <div class="table-responsive no-padding">
+                    <product-table :data="products" :count="countProducts" :current-page="currentPage" @search="searchForm" @updatecurrentpage="updateCurrentPage"></product-table>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
+
+
+<script src="/js/lib/vee-validate.js"></script>
+<script src="/js/lib/moment.min.js"></script>
+<script src="/js/common.js"></script>
+<script src="/js/search/index.js"></script>
